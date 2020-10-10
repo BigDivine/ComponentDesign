@@ -1,0 +1,8 @@
+include ':basecomponent'
+include ':camera2component'
+include ':sqlitecomponent'
+include ':httpcomponent'
+include ':imageeditcomponent'
+include ':logincomponent'
+include ':app'
+rootProject.name = "CloudGmt"

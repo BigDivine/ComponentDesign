@@ -1,0 +1,52 @@
+ext {
+    versions = [
+            compileSdkVersion      : 29,
+            buildToolsVersion      : "29.0.3",
+            minSdkVersion          : 21,
+            targetSdkVersion       : 29,
+            TestExtJunitVersion    : "1.1.2",
+            EspressoCoreVersion    : "3.3.0",
+            JunitVersion           : "4.12",
+            AppCompatVersion       : "1.2.0",
+            ConstraintLayoutVersion: "2.0.1",
+            RecyclerViewVersion    : "1.2.0-alpha05",
+            FacebookFrescoVersion  : "2.3.0",
+            Retrofit2Version       : "2.9.0",
+            Rxjava2Rxjava          : "2.2.19",
+            Rxjava2RxAndroid       : "2.1.1",
+            Rxjava3Rxjava          : "3.0.6",
+            Rxjava3RxAndroid       : "3.0.0",
+
+
+    ]
+
+    androidx = [
+            AppCompat       : "androidx.appcompat:appcompat:${versions.AppCompatVersion}",
+            ConstraintLayout: "androidx.constraintlayout:constraintlayout:${versions.ConstraintLayoutVersion}",
+            RecyclerView    : "androidx.recyclerview:recyclerview:${versions.RecyclerViewVersion}",
+    ]
+    androidxTest = [
+            TestExtJunit: "androidx.test.ext:junit:${versions.TestExtJunitVersion}",
+            EspressoCore: "androidx.test.espresso:espresso-core:${versions.EspressoCoreVersion}",
+    ]
+    Junits = [
+            Junit: "junit:junit:${versions.JunitVersion}",
+    ]
+    facebook = [
+            Fresco: "com.facebook.fresco:fresco:${versions.FacebookFrescoVersion}",
+    ]
+    retrofit2 = [
+            Retrofit        : "com.squareup.retrofit2:retrofit:${versions.Retrofit2Version}",
+            ConverterGson   : "com.squareup.retrofit2:converter-gson:${versions.Retrofit2Version}",
+            ConverterScalars: "com.squareup.retrofit2:converter-scalars:${versions.Retrofit2Version}",
+            AdapterRxjava2  : "com.squareup.retrofit2:adapter-rxjava2:${versions.Retrofit2Version}",
+    ]
+    rxjava2 = [
+            Rxjava   : "io.reactivex.rxjava2:rxjava:${versions.Rxjava2Rxjava}",
+            Rxandroid: "io.reactivex.rxjava2:rxandroid:${versions.Rxjava2RxAndroid}"
+    ]
+    rxjava3 = [
+            Rxjava   : "io.reactivex.rxjava3:rxjava:${versions.Rxjava3Rxjava}",
+            Rxandroid: "io.reactivex.rxjava3:rxandroid:${versions.Rxjava3RxAndroid}"
+    ]
+}
