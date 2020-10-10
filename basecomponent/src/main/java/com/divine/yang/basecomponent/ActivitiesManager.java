@@ -14,20 +14,20 @@ import java.util.Stack;
  * 2018-11-19
  */
 
-public class PageManager {
-    private static PageManager instance;
+public class ActivitiesManager {
+    private static ActivitiesManager instance;
 
     private static Stack<Activity> activityStack;
 
-    private PageManager() {
+    private ActivitiesManager() {
 
     }
 
-    public synchronized static PageManager getInstance() {
+    public synchronized static ActivitiesManager getInstance() {
         if (null == instance) {
             synchronized (ActivityManager.class) {
                 if (null == instance) {
-                    instance = new PageManager();
+                    instance = new ActivitiesManager();
                 }
             }
         }
