@@ -17,7 +17,7 @@ import java.util.Stack;
 public class ActivitiesManager {
     private static ActivitiesManager instance;
 
-    private static Stack<Activity> activityStack;
+    private Stack<Activity> activityStack;
 
     private ActivitiesManager() {
 
@@ -37,11 +37,11 @@ public class ActivitiesManager {
     /**
      * 添加Activity到堆栈
      */
-    public void addActivity(Activity activity) {
+    public boolean addActivity(Activity activity) {
         if (activityStack == null) {
             activityStack = new Stack<>();
         }
-        activityStack.add(activity);
+        return activityStack.add(activity);
     }
 
     /**
@@ -66,7 +66,6 @@ public class ActivitiesManager {
         if (activity != null) {
             activityStack.remove(activity);
             activity.finish();
-            //            activity = null;
         }
     }
 
@@ -87,7 +86,7 @@ public class ActivitiesManager {
     public void finishAllActivity() {
         for (int i = 0, size = activityStack.size(); i < size; i++) {
             if (null != activityStack.get(i)) {
-                activityStack.get(i).finish();
+                finishActivity(activityStack.get(i));
             }
         }
         activityStack.clear();
@@ -107,4 +106,10 @@ public class ActivitiesManager {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 获取存储activity的栈
+     * @return
+     */
+    public Stack<Activity> getActivityStack() {return activityStack;}
 }
