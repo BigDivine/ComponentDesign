@@ -1,8 +1,9 @@
-package com.divine.yang.basecomponent;
+package com.divine.yang.basecomponent.base;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,36 @@ import androidx.fragment.app.Fragment;
  */
 
 public abstract class BaseFragment extends Fragment {
+    private final String TAG = "Divine-BaseFragment";
 
     public Context mContext;
+
+    // 可以对控件进行初始化
+    protected abstract void initView(View view);
+
+    // 对数据进行初始化
+    protected abstract void setData();
+
+    // 布局id
+    public abstract int setContentView();
+
+    @Override
+    public void onAttach(Context context) {
+        Log.e(TAG, "onAttach");
+        super.onAttach(context);
+        this.mContext = context;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.e(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.e(TAG, "onCreateView");
         View view = inflater.inflate(setContentView(), null);
 
         initView(view);
@@ -32,27 +57,34 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.mContext = context;
+    public void onStart() {
+        Log.e(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.e(TAG, "onResume");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.e(TAG, "onPause");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.e(TAG, "onStop");
+        super.onStop();
     }
 
     @Override
     public void onDestroy() {
+        Log.e(TAG, "onDestroy");
         super.onDestroy();
     }
-
-
-    // 抽象 - 初始化方法，可以对控件进行初始化，也可以对数据进行初始化
-    protected abstract void initView(View view);
-
-    protected abstract void setData();
-
-    /**
-     * @return 布局id
-     */
-    public abstract int setContentView();
-
 
     public void startActivity(Class c, Bundle bundle) {
         Intent intent = new Intent(getContext(), c);

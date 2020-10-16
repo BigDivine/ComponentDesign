@@ -1,33 +1,45 @@
 ext {
     versions = [
-            compileSdkVersion      : 29,
-            buildToolsVersion      : "29.0.3",
-            minSdkVersion          : 21,
-            targetSdkVersion       : 29,
-            TestExtJunitVersion    : "1.1.2",
-            EspressoCoreVersion    : "3.3.0",
-            JunitVersion           : "4.12",
-            AppCompatVersion       : "1.2.0",
-            ConstraintLayoutVersion: "2.0.1",
-            RecyclerViewVersion    : "1.2.0-alpha05",
-            FacebookFrescoVersion  : "2.3.0",
-            Retrofit2Version       : "2.9.0",
-            Rxjava2Rxjava          : "2.2.19",
-            Rxjava2RxAndroid       : "2.1.1",
-            Rxjava3Rxjava          : "3.0.6",
-            Rxjava3RxAndroid       : "3.0.0",
-
-
+            compileSdkVersion         : 29,
+            buildToolsVersion         : "29.0.3",
+            minSdkVersion             : 21,
+            targetSdkVersion          : 29,
+            TestExtJunitVersion       : "1.1.2",
+            EspressoCoreVersion       : "3.3.0",
+            JunitVersion              : "4.12",
+            AppCompatVersion          : "1.2.0",
+            DesignVersion             : "28.0.0",
+            ConstraintLayoutVersion   : "2.0.1",
+            RecyclerViewVersion       : "1.2.0-alpha05",
+            NavigationUIVersion       : "2.3.1",
+            NavigationFragmentVersion : "2.3.1",
+            LifecycleExtensionsVersion: "2.2.0",
+            FacebookFrescoVersion     : "2.3.0",
+            Retrofit2Version          : "2.9.0",
+            Rxjava2Rxjava             : "2.2.19",
+            Rxjava2RxAndroid          : "2.1.1",
+            Rxjava3Rxjava             : "3.0.6",
+            Rxjava3RxAndroid          : "3.0.0",
+            MaterialVersion           : "1.2.1"
     ]
 
     androidx = [
-            AppCompat       : "androidx.appcompat:appcompat:${versions.AppCompatVersion}",
-            ConstraintLayout: "androidx.constraintlayout:constraintlayout:${versions.ConstraintLayoutVersion}",
-            RecyclerView    : "androidx.recyclerview:recyclerview:${versions.RecyclerViewVersion}",
+            AppCompat          : "androidx.appcompat:appcompat:${versions.AppCompatVersion}",
+            ConstraintLayout   : "androidx.constraintlayout:constraintlayout:${versions.ConstraintLayoutVersion}",
+            RecyclerView       : "androidx.recyclerview:recyclerview:${versions.RecyclerViewVersion}",
+            NavigationUI       : "androidx.navigation:navigation-ui:${versions.NavigationUIVersion}",
+            NavigationFragment : "androidx.navigation:navigation-fragment:${versions.NavigationFragmentVersion}",
+            LifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:${versions.LifecycleExtensionsVersion}",
+    ]
+    androidSupport = [
+            Design: "com.android.support:design:${versions.DesignVersion}",
     ]
     androidxTest = [
             TestExtJunit: "androidx.test.ext:junit:${versions.TestExtJunitVersion}",
             EspressoCore: "androidx.test.espresso:espresso-core:${versions.EspressoCoreVersion}",
+    ]
+    googleAndroid = [
+            Material: "com.google.android.material:material:${versions.MaterialVersion}",
     ]
     Junits = [
             Junit: "junit:junit:${versions.JunitVersion}",

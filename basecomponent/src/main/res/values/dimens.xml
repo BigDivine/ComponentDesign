@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="action_bar_height">63dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="sp_17">17sp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_36">36dp</dimen>
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="dp_0">0dp</dimen>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.divine.yang.basecomponent.MainFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.divine.yang.basecomponent.MainFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/navigation_applications"
+        android:name="com.divine.yang.basecomponent.MainFragment"
+        android:label="@string/title_applications"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/navigation_user_info"
+        android:name="com.divine.yang.basecomponent.MainFragment"
+        android:label="@string/title_user_info"
+        tools:layout="@layout/fragment_main" />
+
+
+</navigation>

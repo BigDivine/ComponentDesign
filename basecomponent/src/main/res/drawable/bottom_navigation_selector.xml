@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item android:state_checked="true" android:drawable="@drawable/icon_home_selected"/>-->
+    <!--<item android:state_checked="false" android:drawable="@drawable/icon_home"/>-->
+    <item android:color="#136EF1" android:state_selected="true" />
+    <item android:color="#4B5461" android:state_selected="false" />
+</selector>

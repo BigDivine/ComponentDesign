@@ -1,4 +1,4 @@
-package com.divine.yang.basecomponent;
+package com.divine.yang.basecomponent.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -11,7 +11,7 @@ import java.util.Stack;
  * <p>
  * author yzl
  * <p>
- * 2018-11-19
+ * 2020-10-01
  */
 
 public class ActivitiesManager {
@@ -109,6 +109,7 @@ public class ActivitiesManager {
 
     /**
      * 获取存储activity的栈
+     *
      * @return
      */
     public Stack<Activity> getActivityStack() {return activityStack;}

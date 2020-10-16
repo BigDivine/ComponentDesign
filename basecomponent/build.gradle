@@ -59,4 +59,6 @@ dependencies {
 
     implementation androidx.AppCompat
     implementation androidx.ConstraintLayout
+    implementation androidx.NavigationUI
+    implementation androidx.NavigationFragment
 }

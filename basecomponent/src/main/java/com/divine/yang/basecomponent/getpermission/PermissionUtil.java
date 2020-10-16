@@ -39,7 +39,12 @@ public class PermissionUtil {
      */
     public static void requestPermissions(Activity activity, String[] permissions, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(permissions, requestCode);
+            // 获取未授权的权限
+            String[] deniedPermissions = getDeniedPermissions(activity, permissions);
+            if (deniedPermissions != null && deniedPermissions.length > 0) {
+                // 如果存在未授权的权限，弹出对话框请求权限
+                activity.requestPermissions(deniedPermissions, requestCode);
+            }
         }
     }
 
@@ -60,7 +65,6 @@ public class PermissionUtil {
             }
             int size = deniedPermissionList.size();
             if (size > 0) {
-                //                return deniedPermissionList.toArray(new String[size]);
                 return deniedPermissionList.toArray(new String[size]);
             }
         }
