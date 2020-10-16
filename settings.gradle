@@ -1,3 +1,4 @@
+include ':commonlibrary'
 include ':widgetcomponent'
 include ':basecomponent'
 include ':camera2component'

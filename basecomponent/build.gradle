@@ -1,11 +1,17 @@
-apply plugin: 'com.android.application'
+if (isBaseRunAlone.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
 
 android {
     compileSdkVersion versions.compileSdkVersion
     buildToolsVersion "${versions.buildToolsVersion}"
 
     defaultConfig {
-        applicationId "com.divine.yang.basecomponent"
+        if (isBaseRunAlone.toBoolean()) {
+            applicationId "com.divine.yang.basecomponent"
+        }
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
 
@@ -23,7 +29,20 @@ android {
             }
         }
     }
+    sourceSets {
+        main {
+            if (isBaseRunAlone.toBoolean()) {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+            }
+        }
+    }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     buildTypes {
         debug {
             minifyEnabled false
@@ -35,30 +54,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    android.applicationVariants.all {
-        variant ->
-            variant.outputs.all {
-                def buildName
-                def versionName
-                def releaseTime = new Date().format("yyMMddHHmm")
-                variant.productFlavors.each { product ->
-                    buildName = product.name
-                    versionName = product.versionName
+    if (isBaseRunAlone.toBoolean()) {
+        android.applicationVariants.all {
+            variant ->
+                variant.outputs.all {
+                    def buildName
+                    def versionName
+                    def releaseTime = new Date().format("yyMMddHHmm")
+                    variant.productFlavors.each { product ->
+                        buildName = product.name
+                        versionName = product.versionName
+                    }
+                    def fileName = "CAMERA2_${buildName}_V${versionName}.${releaseTime}.apk"
+                    outputFileName = fileName
                 }
-                def fileName = "CAMERA2_${buildName}_V${versionName}.${releaseTime}.apk"
-                outputFileName = fileName
-            }
+        }
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    testImplementation Junits.Junit
-    androidTestImplementation androidxTest.TestExtJunit
-    androidTestImplementation androidxTest.EspressoCore
+    implementation project(":commonlibrary")
 
-    implementation androidx.AppCompat
-    implementation androidx.ConstraintLayout
     implementation androidx.NavigationUI
     implementation androidx.NavigationFragment
 }
