@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
  */
 
 public abstract class BaseFragment extends Fragment {
-    private final String TAG = "Divine-BaseFragment";
+    private final String TAG = "D-BaseFragment";
 
     public Context mContext;
 

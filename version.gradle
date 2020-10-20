@@ -20,7 +20,9 @@ ext {
             Rxjava2RxAndroid          : "2.1.1",
             Rxjava3Rxjava             : "3.0.6",
             Rxjava3RxAndroid          : "3.0.0",
-            MaterialVersion           : "1.2.1"
+            MaterialVersion           : "1.2.1",
+            RouterCompilerVersion     : "1.2.0",
+            RouterVersion             : "1.2.0"
     ]
 
     androidx = [
@@ -60,5 +62,9 @@ ext {
     rxjava3 = [
             Rxjava   : "io.reactivex.rxjava3:rxjava:${versions.Rxjava3Rxjava}",
             Rxandroid: "io.reactivex.rxjava3:rxandroid:${versions.Rxjava3RxAndroid}"
+    ]
+    wmRouter = [
+            RouterCompiler: "com.sankuai.waimai.router:compiler:${versions.RouterCompilerVersion}",
+            Router        : "com.sankuai.waimai.router:router:${versions.RouterVersion}"
     ]
 }

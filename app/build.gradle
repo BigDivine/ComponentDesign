@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
-
+// 应用WMRouter插件
+apply plugin: 'WMRouter'
 android {
 
     compileSdkVersion versions.compileSdkVersion
     buildToolsVersion "${versions.buildToolsVersion}"
 
     defaultConfig {
-        applicationId "com.divine.yang.cloudgmt"
+        applicationId "com.divine.yang.componentdesign"
 
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
@@ -61,22 +62,19 @@ android {
 dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":commonlibrary")
-    //    #基类模块是否独立运行
-    if (!isBaseRunAlone.toBoolean()) {
-        implementation project(":logincomponent")
-    }
+    implementation project(":basecomponent")
+
     //    #camera2相机拍照模块是否独立运行
     if (!isCamera2RunAlone.toBoolean()) {
-        implementation project(":logincomponent")
+        implementation project(":camera2component")
     }
     //    #网络请求模块是否独立运行
     if (!isHttpRunAlone.toBoolean()) {
-        implementation project(":logincomponent")
+        implementation project(":httpcomponent")
     }
     //    #仿微信图片编辑模块是否独立运行
     if (!isImageEditRunAlone.toBoolean()) {
-        implementation project(":logincomponent")
+        implementation project(":imageeditcomponent")
     }
     //    #登录模块是否独立运行
     if (!isLoginRunAlone.toBoolean()) {
@@ -84,10 +82,12 @@ dependencies {
     }
     //    #数据库管理模块是否独立运行
     if (!isSqliteRunAlone.toBoolean()) {
-        implementation project(":logincomponent")
+        implementation project(":sqlitecomponent")
     }
     //    #自定义控件模块是否独立运行
     if (!isWidgetRunAlone.toBoolean()) {
-        implementation project(":logincomponent")
+        implementation project(":widgetcomponent")
     }
+    annotationProcessor wmRouter.RouterCompiler
+
 }

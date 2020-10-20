@@ -74,7 +74,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":commonlibrary")
+    implementation project(":basecomponent")
 
     implementation retrofit2.Retrofit
     implementation retrofit2.ConverterGson
@@ -82,4 +82,6 @@ dependencies {
     implementation retrofit2.AdapterRxjava2
     implementation rxjava2.Rxjava
     implementation rxjava2.Rxandroid
+    annotationProcessor wmRouter.RouterCompiler
+
 }

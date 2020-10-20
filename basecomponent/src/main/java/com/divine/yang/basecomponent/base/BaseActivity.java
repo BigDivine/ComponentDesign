@@ -23,7 +23,7 @@ import androidx.appcompat.widget.Toolbar;
  * Create by BigDivine on 2020/10/10
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    private final String TAG="Divine-BaseActivity";
+    private final String TAG = "D-BaseActivity";
     // activity manager class:activity管理类
     private ActivitiesManager activitiesManager;
     // current time by millisecond:当前时间毫秒数
@@ -88,6 +88,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         requestPermissions = requestPermissions();
         //获取未授权的权限,并且弹框请求权限
         PermissionUtil.requestPermissions(this, requestPermissions, REQUEST_PERMISSION_REQUEST_CODE);
+        initView();
+
     }
 
     @Nullable
@@ -113,6 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         Log.e(TAG, "onResume");
         super.onResume();
+        getData();
     }
 
     @Override

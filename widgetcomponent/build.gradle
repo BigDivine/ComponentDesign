@@ -72,10 +72,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":commonlibrary")
+    implementation project(":basecomponent")
 
     implementation androidx.NavigationUI
     implementation androidx.NavigationFragment
     implementation androidx.LifecycleExtensions
     implementation googleAndroid.Material
+    annotationProcessor wmRouter.RouterCompiler
 }
