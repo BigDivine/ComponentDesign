@@ -1,10 +1,7 @@
 package com.divine.yang.camera2component;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,92 +11,43 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.divine.yang.basecomponent.base.BaseFragmentActivity;
-import com.divine.yang.camera2component.imageselect.Constant;
+import com.divine.yang.basecomponent.base.BaseActivity;
+import com.divine.yang.basecomponent.getpermission.PermissionList;
 import com.divine.yang.camera2component.imageselect.FileUtils;
-import com.divine.yang.camera2component.imageselect.ImageListCallback;
-import com.divine.yang.camera2component.imageselect.PicSelectCallback;
 import com.divine.yang.camera2component.imageselect.PicSelectConfig;
 import com.divine.yang.camera2component.imageselect.PicSelectFragment;
+import com.divine.yang.camera2component.imageselect.PicSelectStaticVariable;
+import com.divine.yang.camera2component.imageselect.interfaces.PicSelectCallback;
+import com.divine.yang.camera2component.imageselect.interfaces.PicSelectListener;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 /**
  * Author: Divine
  * CreateDate: 2020/10/20
  * Describe:
  */
-public class PicSelectActivity extends BaseFragmentActivity implements View.OnClickListener, PicSelectCallback {
+public class PicSelectActivity extends BaseActivity implements View.OnClickListener, PicSelectListener {
 
-    public static final String INTENT_RESULT = "result";
     private static final int IMAGE_CROP_CODE = 1;
-    private static final int STORAGE_REQUEST_CODE = 1;
+    private String mCropImagePath;
+
+    private RelativeLayout mPicSelectHeaderLayout;
+    private TextView mPicSelectHeaderTitle;
+    private Button mPicSelectHeaderConfirm;
+    private ImageButton mPicSelectHeaderBack;
 
     private PicSelectConfig mPicSelectConfig;
-
-    private RelativeLayout rlTitleBar;
-    private TextView tvTitle;
-    private Button btnConfirm;
-    private ImageView ivBack;
-    private String cropImagePath;
-
     private PicSelectFragment mPicSelectFragment;
+    private ArrayList<String> mPicSelectImagesResult = new ArrayList<>();
 
-    private ArrayList<String> result = new ArrayList<>();
-
-    public static void startForResult(Activity activity, PicSelectConfig mPicSelectConfig, int RequestCode) {
-        Intent intent = new Intent(activity, PicSelectActivity.class);
-        intent.putExtra("config", mPicSelectConfig);
-        activity.startActivityForResult(intent, RequestCode);
-    }
-
-    public static void startForResult(Fragment fragment, PicSelectConfig mPicSelectConfig, int RequestCode) {
-        Intent intent = new Intent(fragment.getActivity(), PicSelectActivity.class);
-        intent.putExtra("config", mPicSelectConfig);
-        fragment.startActivityForResult(intent, RequestCode);
-    }
-
-    public static void startForResult(android.app.Fragment fragment, PicSelectConfig mPicSelectConfig, int RequestCode) {
-        Intent intent = new Intent(fragment.getActivity(), PicSelectActivity.class);
-        intent.putExtra("config", mPicSelectConfig);
-        fragment.startActivityForResult(intent, RequestCode);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pic_select_layout);
-
-
-        // Android 6.0 checkSelfPermission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                              STORAGE_REQUEST_CODE);
-        } else {
-            mPicSelectFragment = PicSelectFragment.instance();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fmImageList, mPicSelectFragment, null)
-                    .commit();
-        }
-
-        initView();
-        if (!FileUtils.isSdCardAvailable()) {
-            Toast.makeText(this, "SD卡不可用", Toast.LENGTH_SHORT).show();
-        }
-    }
+    private static PicSelectCallback mPicSelectCallback;
 
     @Override
     public int getContentViewId() {
@@ -115,69 +63,81 @@ public class PicSelectActivity extends BaseFragmentActivity implements View.OnCl
     public View getToolbar() {
         return null;
     }
+
     @Override
     public void initView() {
-        rlTitleBar = (RelativeLayout) findViewById(R.id.rlTitleBar);
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        mPicSelectFragment = PicSelectFragment.instance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.pic_select_images_frame, mPicSelectFragment, null)
+                .commit();
 
-        btnConfirm = (Button) findViewById(R.id.btnConfirm);
-        btnConfirm.setOnClickListener(this);
-
-        ivBack = (ImageView) findViewById(R.id.ivBack);
-        ivBack.setOnClickListener(this);
+        mPicSelectHeaderLayout = findViewById(R.id.pic_select_header_layout);
+        mPicSelectHeaderTitle = findViewById(R.id.pic_select_header_title);
+        mPicSelectHeaderConfirm = findViewById(R.id.pic_select_header_confirm);
+        mPicSelectHeaderBack = findViewById(R.id.pic_select_header_back);
+        mPicSelectHeaderConfirm.setOnClickListener(this);
+        mPicSelectHeaderBack.setOnClickListener(this);
 
         if (mPicSelectConfig != null) {
-            if (mPicSelectConfig.backResId != -1) {
-                ivBack.setImageResource(mPicSelectConfig.backResId);
-            }
+            initConfig();
+        }
+        if (!FileUtils.isSdCardAvailable()) {
+            Toast.makeText(this, "SD卡不可用", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-            if (mPicSelectConfig.statusBarColor != -1) {
-                StatusBarCompat.compat(this, mPicSelectConfig.statusBarColor);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                        && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                    //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                }
+    /**
+     * 根据config配置页面
+     */
+    private void initConfig() {
+        if (mPicSelectConfig.backResId != -1) {
+            mPicSelectHeaderBack.setImageResource(mPicSelectConfig.backResId);
+        }
+        if (mPicSelectConfig.statusBarColor != -1) {
+            StatusBarCompat.compat(this, mPicSelectConfig.statusBarColor);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                    && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             }
-            rlTitleBar.setBackgroundColor(mPicSelectConfig.titleBgColor);
-            tvTitle.setTextColor(mPicSelectConfig.titleColor);
-            tvTitle.setText(mPicSelectConfig.title);
-            btnConfirm.setBackgroundColor(mPicSelectConfig.btnBgColor);
-            btnConfirm.setTextColor(mPicSelectConfig.btnTextColor);
-
-            if (mPicSelectConfig.multiSelect) {
-                if (!mPicSelectConfig.rememberSelected) {
-                    Constant.imageList.clear();
-                }
-                btnConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, Constant.imageList.size(), mPicSelectConfig.maxNum));
-            } else {
-                Constant.imageList.clear();
-                btnConfirm.setVisibility(View.GONE);
+        }
+        mPicSelectHeaderLayout.setBackgroundColor(mPicSelectConfig.titleBgColor);
+        mPicSelectHeaderTitle.setTextColor(mPicSelectConfig.titleColor);
+        mPicSelectHeaderTitle.setText(mPicSelectConfig.title);
+        mPicSelectHeaderConfirm.setBackgroundColor(mPicSelectConfig.btnBgColor);
+        mPicSelectHeaderConfirm.setTextColor(mPicSelectConfig.btnTextColor);
+        if (mPicSelectConfig.multiSelect) {
+            if (!mPicSelectConfig.rememberSelected) {
+                PicSelectStaticVariable.mPicSelectImageList.clear();
             }
+            mPicSelectHeaderConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
+        } else {
+            PicSelectStaticVariable.mPicSelectImageList.clear();
+            mPicSelectHeaderConfirm.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void getData() {
         mPicSelectConfig = (PicSelectConfig) getIntent().getSerializableExtra("config");
-
     }
 
     @Override
     public String[] requestPermissions() {
-        return new String[0];
+        return new String[]{PermissionList.WRITE_EXTERNAL_STORAGE};
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btnConfirm) {
-            if (Constant.imageList != null && !Constant.imageList.isEmpty()) {
-                exit();
+        if (id == R.id.pic_select_header_confirm) {
+            if (PicSelectStaticVariable.mPicSelectImageList != null && !PicSelectStaticVariable.mPicSelectImageList.isEmpty()) {
+                exitPicSelectActivity();
             } else {
-                Toast.makeText(this,"最少选择一张图片", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "最少选择一张图片", Toast.LENGTH_SHORT).show();
             }
-        } else if (id == R.id.ivBack) {
+        } else if (id == R.id.pic_select_header_back) {
             onBackPressed();
         }
     }
@@ -185,32 +145,32 @@ public class PicSelectActivity extends BaseFragmentActivity implements View.OnCl
     @Override
     public void onSingleImageSelected(String path) {
         if (mPicSelectConfig.needCrop) {
-            crop(path);
+            cropPicSelectImage(path);
         } else {
-            Constant.imageList.add(path);
-            exit();
+            PicSelectStaticVariable.mPicSelectImageList.add(path);
+            exitPicSelectActivity();
         }
     }
 
     @Override
     public void onImageSelected(String path) {
-        btnConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, Constant.imageList.size(), mPicSelectConfig.maxNum));
+        mPicSelectHeaderConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
     }
 
     @Override
     public void onImageUnselected(String path) {
-        btnConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, Constant.imageList.size(), mPicSelectConfig.maxNum));
+        mPicSelectHeaderConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
     }
 
     @Override
     public void onCameraShot(File imageFile) {
         if (imageFile != null) {
             if (mPicSelectConfig.needCrop) {
-                crop(imageFile.getAbsolutePath());
+                cropPicSelectImage(imageFile.getAbsolutePath());
             } else {
-                Constant.imageList.add(imageFile.getAbsolutePath());
+                PicSelectStaticVariable.mPicSelectImageList.add(imageFile.getAbsolutePath());
                 mPicSelectConfig.multiSelect = false; // 多选点击拍照，强制更改为单选
-                exit();
+                exitPicSelectActivity();
             }
         }
     }
@@ -218,16 +178,16 @@ public class PicSelectActivity extends BaseFragmentActivity implements View.OnCl
     @Override
     public void onPreviewChanged(int select, int sum, boolean visible) {
         if (visible) {
-            tvTitle.setText(select + "/" + sum);
+            mPicSelectHeaderTitle.setText(select + "/" + sum);
         } else {
-            tvTitle.setText(mPicSelectConfig.title);
+            mPicSelectHeaderTitle.setText(mPicSelectConfig.title);
         }
     }
 
-    private void crop(String imagePath) {
+    private void cropPicSelectImage(String imagePath) {
         File file = new File(FileUtils.createRootPath(this) + "/" + System.currentTimeMillis() + ".jpg");
 
-        cropImagePath = file.getAbsolutePath();
+        mCropImagePath = file.getAbsolutePath();
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(getImageContentUri(new File(imagePath)), "image/*");
         intent.putExtra("crop", "true");
@@ -253,8 +213,7 @@ public class PicSelectActivity extends BaseFragmentActivity implements View.OnCl
                 new String[]{filePath}, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor
-                                           .getColumnIndex(MediaStore.MediaColumns._ID));
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
             Uri baseUri = Uri.parse("content://media/external/images/media");
             return Uri.withAppendedPath(baseUri, "" + id);
         } else {
@@ -269,53 +228,15 @@ public class PicSelectActivity extends BaseFragmentActivity implements View.OnCl
         }
     }
 
-    public PicSelectConfig getConfig() {
-        return mPicSelectConfig;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMAGE_CROP_CODE && resultCode == RESULT_OK) {
-            Constant.imageList.add(cropImagePath);
+            PicSelectStaticVariable.mPicSelectImageList.add(mCropImagePath);
             mPicSelectConfig.multiSelect = false; // 多选点击拍照，强制更改为单选
-            exit();
+            exitPicSelectActivity();
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private static ImageListCallback imageListCallback;
-
-    public static void setImageListCallback(ImageListCallback imageListCallback) {
-        PicSelectActivity.imageListCallback = imageListCallback;
-    }
-
-    public void exit() {
-        finish();
-        result.clear();
-        result.addAll(Constant.imageList);
-        imageListCallback.getImageList(result);
-        if (!mPicSelectConfig.multiSelect) {
-            Constant.imageList.clear();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case STORAGE_REQUEST_CODE:
-                if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .add(R.id.fmImageList,PicSelectFragment.instance(), null)
-                            .commitAllowingStateLoss();
-                } else {
-                    Toast.makeText(this,"请打开存储空间权限", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
@@ -333,7 +254,7 @@ public class PicSelectActivity extends BaseFragmentActivity implements View.OnCl
     @Override
     public void onBackPressed() {
         if (mPicSelectFragment == null || !mPicSelectFragment.hidePreview()) {
-            Constant.imageList.clear();
+            PicSelectStaticVariable.mPicSelectImageList.clear();
             super.onBackPressed();
         }
     }
@@ -341,5 +262,22 @@ public class PicSelectActivity extends BaseFragmentActivity implements View.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+    public void exitPicSelectActivity() {
+        finish();
+        mPicSelectImagesResult.clear();
+        mPicSelectImagesResult.addAll(PicSelectStaticVariable.mPicSelectImageList);
+        mPicSelectCallback.getImageList(mPicSelectImagesResult);
+        if (!mPicSelectConfig.multiSelect) {
+            PicSelectStaticVariable.mPicSelectImageList.clear();
+        }
+    }
+
+    public static void setPicSelectCallback(PicSelectCallback mPicSelectCallback) {
+        PicSelectActivity.mPicSelectCallback = mPicSelectCallback;
+    }
+
+    public PicSelectConfig getConfig() {
+        return mPicSelectConfig;
     }
 }

@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -23,8 +22,12 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.divine.yang.basecomponent.base.BaseFragment;
 import com.divine.yang.camera2component.PicSelectActivity;
 import com.divine.yang.camera2component.R;
+import com.divine.yang.camera2component.imageselect.interfaces.OnFolderChangeListener;
+import com.divine.yang.camera2component.imageselect.interfaces.OnItemClickListener;
+import com.divine.yang.camera2component.imageselect.interfaces.PicSelectListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +38,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.ListPopupWindow;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -48,22 +50,23 @@ import androidx.viewpager.widget.ViewPager;
  * CreateDate: 2020/10/20
  * Describe:
  */
-public class PicSelectFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class PicSelectFragment extends BaseFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
-    private RecyclerView rvImageList;
-    private Button btnAlbumSelected;
-    private View rlBottom;
-    private CustomViewPager viewPager;
+    private RecyclerView mRvPicSelectFragmentImgList;
+    private Button mBtnPicSelectFragmentBottomAlbumSelect;
+    private View mRlPicSelectFragmentBottomLayout;
+    private CustomViewPager mCvpPicSelectFragmentPicPreview;
 
     private PicSelectConfig mPicSelectConfig;
-    private PicSelectCallback mPicSelectCallback;
-    private List<Folder> folderList = new ArrayList<>();
-    private List<Image> imageList = new ArrayList<>();
+    private PicSelectListener mPicSelectListener;
+    private List<Folder> mFolderList = new ArrayList<>();
+    private List<Image> mImageList = new ArrayList<>();
 
     private ListPopupWindow folderPopupWindow;
-    private ImageListsAdapter imageListAdapter;
     private FolderListAdapter folderListAdapter;
+
     private PreviewAdapter previewAdapter;
+    private ImageListsAdapter imageListAdapter;
 
     private boolean hasFolderGened = false;
 
@@ -83,40 +86,49 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pic_select_layout, container, false);
-        rvImageList = (RecyclerView) view.findViewById(R.id.rvImageList);
-        btnAlbumSelected = (Button) view.findViewById(R.id.btnAlbumSelected);
-        btnAlbumSelected.setOnClickListener(this);
-        rlBottom = view.findViewById(R.id.rlBottom);
-        viewPager = (CustomViewPager) view.findViewById(R.id.viewPager);
-        viewPager.setOffscreenPageLimit(1);
-        viewPager.addOnPageChangeListener(this);
-        return view;
+    protected void initView(View view) {
+        mRvPicSelectFragmentImgList = view.findViewById(R.id.pic_select_fragment_img_list);
+        mBtnPicSelectFragmentBottomAlbumSelect = view.findViewById(R.id.pic_select_fragment_bottom_album_select);
+        mRlPicSelectFragmentBottomLayout = view.findViewById(R.id.pic_select_fragment_bottom_layout);
+        mCvpPicSelectFragmentPicPreview = view.findViewById(R.id.pic_select_fragment_pic_preview);
+
+        mBtnPicSelectFragmentBottomAlbumSelect.setOnClickListener(this);
+        mCvpPicSelectFragmentPicPreview.setOffscreenPageLimit(1);
+        mCvpPicSelectFragmentPicPreview.addOnPageChangeListener(this);
+    }
+
+    @Override
+    protected void setData() {
+
+    }
+
+    @Override
+    public int setContentView() {
+        return R.layout.fragment_pic_select_layout;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPicSelectConfig = ((PicSelectActivity) getActivity()).getConfig();
-        mPicSelectCallback = ((PicSelectActivity) getActivity());
+        mPicSelectListener = ((PicSelectActivity) getActivity());
 
         if (mPicSelectConfig == null) {
             Log.e("ImgSelFragment", "config 参数不能为空");
             return;
         }
 
-        btnAlbumSelected.setText(mPicSelectConfig.allImagesText);
+        mBtnPicSelectFragmentBottomAlbumSelect.setText(mPicSelectConfig.allImagesText);
 
-        rvImageList.setLayoutManager(new GridLayoutManager(rvImageList.getContext(), 3));
-        rvImageList.addItemDecoration(new DividerGridItemDecoration(rvImageList.getContext()));
+        mRvPicSelectFragmentImgList.setLayoutManager(new GridLayoutManager(mRvPicSelectFragmentImgList.getContext(), 3));
+        mRvPicSelectFragmentImgList.addItemDecoration(new DividerGridItemDecoration(mRvPicSelectFragmentImgList.getContext()));
         if (mPicSelectConfig.needCamera)
-            imageList.add(new Image());
+            mImageList.add(new Image());
 
-        imageListAdapter = new ImageListsAdapter(getActivity(), imageList, mPicSelectConfig);
+        imageListAdapter = new ImageListsAdapter(getActivity(), mImageList, mPicSelectConfig);
         imageListAdapter.setShowCamera(mPicSelectConfig.needCamera);
         imageListAdapter.setMutiSelect(mPicSelectConfig.multiSelect);
-        rvImageList.setAdapter(imageListAdapter);
+        mRvPicSelectFragmentImgList.setAdapter(imageListAdapter);
         imageListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public int onCheckedClick(int position, Image image) {
@@ -129,7 +141,7 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
                     showCameraAction();
                 } else {
                     if (mPicSelectConfig.multiSelect) {
-                        viewPager.setAdapter((previewAdapter = new PreviewAdapter(getActivity(), imageList, mPicSelectConfig)));
+                        mCvpPicSelectFragmentPicPreview.setAdapter((previewAdapter = new PreviewAdapter(getActivity(), mImageList, mPicSelectConfig)));
                         previewAdapter.setListener(new OnItemClickListener() {
                             @Override
                             public int onCheckedClick(int position, Image image) {
@@ -142,42 +154,42 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
                             }
                         });
                         if (mPicSelectConfig.needCamera) {
-                            mPicSelectCallback.onPreviewChanged(position, imageList.size() - 1, true);
+                            mPicSelectListener.onPreviewChanged(position, mImageList.size() - 1, true);
                         } else {
-                            mPicSelectCallback.onPreviewChanged(position + 1, imageList.size(), true);
+                            mPicSelectListener.onPreviewChanged(position + 1, mImageList.size(), true);
                         }
-                        viewPager.setCurrentItem(mPicSelectConfig.needCamera ? position - 1 : position);
-                        viewPager.setVisibility(View.VISIBLE);
+                        mCvpPicSelectFragmentPicPreview.setCurrentItem(mPicSelectConfig.needCamera ? position - 1 : position);
+                        mCvpPicSelectFragmentPicPreview.setVisibility(View.VISIBLE);
                     } else {
-                        if (mPicSelectCallback != null) {
-                            mPicSelectCallback.onSingleImageSelected(image.path);
+                        if (mPicSelectListener != null) {
+                            mPicSelectListener.onSingleImageSelected(image.path);
                         }
                     }
                 }
             }
         });
 
-        folderListAdapter = new FolderListAdapter(getActivity(), folderList, mPicSelectConfig);
+        folderListAdapter = new FolderListAdapter(getActivity(), mFolderList, mPicSelectConfig);
 
         getActivity().getSupportLoaderManager().initLoader(LOADER_ALL, null, mLoaderCallback);
     }
 
     private int checkedImage(int position, Image image) {
         if (image != null) {
-            if (Constant.imageList.contains(image.path)) {
-                Constant.imageList.remove(image.path);
-                if (mPicSelectCallback != null) {
-                    mPicSelectCallback.onImageUnselected(image.path);
+            if (PicSelectStaticVariable.mPicSelectImageList.contains(image.path)) {
+                PicSelectStaticVariable.mPicSelectImageList.remove(image.path);
+                if (mPicSelectListener != null) {
+                    mPicSelectListener.onImageUnselected(image.path);
                 }
             } else {
-                if (mPicSelectConfig.maxNum <= Constant.imageList.size()) {
+                if (mPicSelectConfig.maxNum <= PicSelectStaticVariable.mPicSelectImageList.size()) {
                     Toast.makeText(getActivity(), String.format("最多选择%1$d张图片", mPicSelectConfig.maxNum), Toast.LENGTH_SHORT).show();
                     return 0;
                 }
 
-                Constant.imageList.add(image.path);
-                if (mPicSelectCallback != null) {
-                    mPicSelectCallback.onImageSelected(image.path);
+                PicSelectStaticVariable.mPicSelectImageList.add(image.path);
+                if (mPicSelectListener != null) {
+                    mPicSelectListener.onImageSelected(image.path);
                 }
             }
             return 1;
@@ -226,7 +238,7 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
                             }
 
                             Folder parent = null;
-                            for (Folder folder : folderList) {
+                            for (Folder folder : mFolderList) {
                                 if (TextUtils.equals(folder.path, folderFile.getAbsolutePath())) {
                                     parent = folder;
                                 }
@@ -243,15 +255,15 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
                                 imageList.add(image);
 
                                 parent.images = imageList;
-                                folderList.add(parent);
+                                mFolderList.add(parent);
                             }
                         }
                     } while (data.moveToNext());
 
-                    imageList.clear();
+                    mImageList.clear();
                     if (mPicSelectConfig.needCamera)
-                        imageList.add(new Image());
-                    imageList.addAll(tempImageList);
+                        mImageList.add(new Image());
+                    mImageList.addAll(tempImageList);
 
                     imageListAdapter.notifyDataSetChanged();
                     folderListAdapter.notifyDataSetChanged();
@@ -274,7 +286,7 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
         folderPopupWindow.setContentWidth(width);
         folderPopupWindow.setWidth(width);
         folderPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        folderPopupWindow.setAnchorView(rlBottom);
+        folderPopupWindow.setAnchorView(mRlPicSelectFragmentBottomLayout);
         folderPopupWindow.setModal(true);
         folderListAdapter.setOnFloderChangeListener(new OnFolderChangeListener() {
             @Override
@@ -282,15 +294,15 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
                 folderPopupWindow.dismiss();
                 if (position == 0) {
                     getActivity().getSupportLoaderManager().restartLoader(LOADER_ALL, null, mLoaderCallback);
-                    btnAlbumSelected.setText(mPicSelectConfig.allImagesText);
+                    mBtnPicSelectFragmentBottomAlbumSelect.setText(mPicSelectConfig.allImagesText);
                 } else {
-                    imageList.clear();
+                    mImageList.clear();
                     if (mPicSelectConfig.needCamera)
-                        imageList.add(new Image());
-                    imageList.addAll(folder.images);
+                        mImageList.add(new Image());
+                    mImageList.addAll(folder.images);
                     imageListAdapter.notifyDataSetChanged();
 
-                    btnAlbumSelected.setText(folder.name);
+                    mBtnPicSelectFragmentBottomAlbumSelect.setText(folder.name);
                 }
             }
         });
@@ -312,7 +324,7 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         WindowManager wm = getActivity().getWindowManager();
         final int size = wm.getDefaultDisplay().getWidth() / 3 * 2;
-        if (v.getId() == btnAlbumSelected.getId()) {
+        if (v.getId() == mBtnPicSelectFragmentBottomAlbumSelect.getId()) {
             if (folderPopupWindow == null) {
                 createPopupFolderList(size, size);
             }
@@ -350,7 +362,7 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
 
     private void showCameraAction() {
 
-        if (mPicSelectConfig.maxNum <= Constant.imageList.size()) {
+        if (mPicSelectConfig.maxNum <= PicSelectStaticVariable.mPicSelectImageList.size()) {
             Toast.makeText(getActivity(), String.format("最多选择%1$d张图片", mPicSelectConfig.maxNum), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -365,7 +377,7 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
 
         if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             tempFile = new File(FileUtils.createRootPath(getActivity()) + "/" + System.currentTimeMillis() + ".jpg");
-            Log.e("D-picSelectFragment",tempFile.getAbsolutePath());
+            Log.e("D-picSelectFragment", tempFile.getAbsolutePath());
             FileUtils.createFile(tempFile);
 
             Uri uri = FileProvider.getUriForFile(getActivity(),
@@ -391,8 +403,8 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
         if (requestCode == REQUEST_CAMERA) {
             if (resultCode == Activity.RESULT_OK) {
                 if (tempFile != null) {
-                    if (mPicSelectCallback != null) {
-                        mPicSelectCallback.onCameraShot(tempFile);
+                    if (mPicSelectListener != null) {
+                        mPicSelectListener.onCameraShot(tempFile);
                     }
                 }
             } else {
@@ -428,9 +440,9 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onPageSelected(int position) {
         if (mPicSelectConfig.needCamera) {
-            mPicSelectCallback.onPreviewChanged(position + 1, imageList.size() - 1, true);
+            mPicSelectListener.onPreviewChanged(position + 1, mImageList.size() - 1, true);
         } else {
-            mPicSelectCallback.onPreviewChanged(position + 1, imageList.size(), true);
+            mPicSelectListener.onPreviewChanged(position + 1, mImageList.size(), true);
         }
     }
 
@@ -440,9 +452,9 @@ public class PicSelectFragment extends Fragment implements View.OnClickListener,
     }
 
     public boolean hidePreview() {
-        if (viewPager.getVisibility() == View.VISIBLE) {
-            viewPager.setVisibility(View.GONE);
-            mPicSelectCallback.onPreviewChanged(0, 0, false);
+        if (mCvpPicSelectFragmentPicPreview.getVisibility() == View.VISIBLE) {
+            mCvpPicSelectFragmentPicPreview.setVisibility(View.GONE);
+            mPicSelectListener.onPreviewChanged(0, 0, false);
             imageListAdapter.notifyDataSetChanged();
             return true;
         } else {

@@ -1,19 +1,24 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvImageList"
+            android:id="@+id/pic_select_fragment_img_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="?android:attr/actionBarSize" />
 
         <RelativeLayout
-            android:id="@+id/rlBottom"
+            android:id="@+id/pic_select_fragment_bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:layout_alignParentBottom="true"
@@ -21,7 +26,7 @@
             android:clickable="true">
 
             <Button
-                android:id="@+id/btnAlbumSelected"
+                android:id="@+id/pic_select_fragment_bottom_album_select"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
@@ -42,9 +47,13 @@
     </RelativeLayout>
 
     <com.divine.yang.camera2component.imageselect.CustomViewPager
-        android:id="@+id/viewPager"
+        android:id="@+id/pic_select_fragment_pic_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        android:visibility="gone" />
-</FrameLayout>
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

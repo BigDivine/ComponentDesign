@@ -129,6 +129,7 @@
             android:background="@drawable/circle_back"
             android:gravity="center"
             android:textColor="@color/white"
+            android:text="5"
             android:textSize="@dimen/sp_9"
             android:visibility="gone" />
 

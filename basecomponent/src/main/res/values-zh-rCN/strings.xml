@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">智慧工地</string>
-    <string name="title_home">首页</string>
-    <string name="title_notifications">消息</string>
-    <string name="title_applications">应用</string>
-    <string name="title_user_info">我的</string>
-
-</resources>

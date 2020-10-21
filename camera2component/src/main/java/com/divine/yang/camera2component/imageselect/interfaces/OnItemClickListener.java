@@ -1,4 +1,6 @@
-package com.divine.yang.camera2component.imageselect;
+package com.divine.yang.camera2component.imageselect.interfaces;
+
+import com.divine.yang.camera2component.imageselect.Image;
 
 /**
  * Author: Divine

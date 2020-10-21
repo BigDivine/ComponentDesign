@@ -86,10 +86,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         activitiesManager.addActivity(this);
 
         requestPermissions = requestPermissions();
-        //获取未授权的权限,并且弹框请求权限
-        PermissionUtil.requestPermissions(this, requestPermissions, REQUEST_PERMISSION_REQUEST_CODE);
-        initView();
-
+        // 获取未授权的权限
+        String[] deniedPermissions = PermissionUtil.getDeniedPermissions(this, requestPermissions);
+        if (deniedPermissions != null && deniedPermissions.length > 0) {
+            // 弹框请求权限
+            PermissionUtil.requestPermissions(this, requestPermissions, REQUEST_PERMISSION_REQUEST_CODE);
+        } else {
+            initView();
+        }
     }
 
     @Nullable
@@ -141,27 +145,35 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.e(TAG, "onRequestPermissionsResult");
         if (requestCode == REQUEST_PERMISSION_REQUEST_CODE) {
+            boolean isAllGranted = true;//是否全部权限已授权
             for (int result : grantResults) {
                 if (result == PackageManager.PERMISSION_DENIED) {
-                    new AlertDialog.Builder(this)
-                            .setMessage("跳转到设置页面允许权限，否则无法正常使用。")
-                            .setTitle("授权提示")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new PermissionPageUtils(BaseActivity.this).jumpPermissionPage();
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
-                            .create()
-                            .show();
+                    isAllGranted = false;
                     break;
                 }
+            }
+            if (isAllGranted) {
+                //已全部授权
+                initView();
+            } else {
+                //权限有缺失
+                new AlertDialog.Builder(this)
+                        .setMessage("跳转到设置页面允许权限，否则无法正常使用。")
+                        .setTitle("授权提示")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new PermissionPageUtils(BaseActivity.this).jumpPermissionPage();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .create()
+                        .show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);

@@ -45,9 +45,9 @@ import android.widget.Toast;
 
 import com.divine.yang.basecomponent.base.BaseFragment;
 import com.divine.yang.camera2component.imageselect.FileUtils;
-import com.divine.yang.camera2component.imageselect.ImageListCallback;
 import com.divine.yang.camera2component.imageselect.ImageUtils;
 import com.divine.yang.camera2component.imageselect.PicSelectConfig;
+import com.divine.yang.camera2component.imageselect.interfaces.PicSelectCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -96,20 +96,16 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     private Handler mHandler;
     private Handler mainHandler;
     //图片保存路径
-    private String path;
+    private String mPicSavePath;
     //图片路径集合，连拍是需要数量限制
-    private ArrayList<HashMap<String, String>> pathList;
-    //图片选择是否支持多选
-    private boolean multiSelect = false;
-    //是否开启闪光灯
-    private boolean isOpenFlash = false;
-    //判断是连拍，还是单拍（false:单拍；true:连拍）
-    private boolean isSingle = false;
+    private ArrayList<HashMap<String, String>> mPicPathList;
+    //是否开启闪光灯,判断是连拍，还是单拍（true:单拍；false:连拍）,图片选择是否支持多选
+    private boolean isOpenFlash = false, isSingle = true, isMultiSelect = false;
     //图片预览和保存相关
     //最佳图片保存尺寸，最佳图片预览尺寸，预览框的尺寸
-    private Size bestSave, bestPreview, targetSize;
+    private Size mPicBestSaveSize, mPicBestPreviewSize, mPicTargetSize;
     //可用的图片保存尺寸集合，可用的图片预览尺寸
-    private Size[] savePicSize, previewSize;
+    private Size[] mPicSaveSize, mPicPreviewSize;
     //手机方向
     private int mDisplayRotation;
     //摄像头方向
@@ -120,30 +116,30 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     private File cropFile;
 
     //图片选择callback
-    ImageListCallback mImageListCallback = new ImageListCallback() {
+    PicSelectCallback mPicSelectCallback = new PicSelectCallback() {
         @Override
         public void getImageList(ArrayList<String> imageList) {
             if (imageList.size() > 0) {
-                if (!multiSelect) {
-                    path = imageList.get(0);
-                    path = ImageUtils.compressImage(path);
-                    //                    Uri sourceUri = Uri.fromFile(new File(path));
+                if (!isMultiSelect) {
+                    mPicSavePath = imageList.get(0);
+                    mPicSavePath = ImageUtils.compressImage(mPicSavePath);
+                    //                    Uri sourceUri = Uri.fromFile(new File(mPicSavePath));
                     cropFile = new File(FileUtils.getAppPath() + "/IMG_" + ImageUtils.setImageName() + "_crop.jpg");
-                    path = cropFile.getAbsolutePath();
+                    mPicSavePath = cropFile.getAbsolutePath();
                     //                    Intent intent = new Intent(getContext(), MyIMGEditActivity.class);
                     //                    intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, sourceUri);
-                    //                    intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, path);
+                    //                    intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, mPicSavePath);
                     //                    getActivity().startActivityForResult(intent, REQ_IMAGE_EDIT);
 
                 } else {
-                    pathList.clear();
+                    mPicPathList.clear();
                     for (int i = 0; i < imageList.size(); i++) {
                         HashMap<String, String> map = new HashMap<>();
                         map.put("name", ImageUtils.getImageName(imageList.get(i)));
                         map.put("path", ImageUtils.compressImage(imageList.get(i)));
-                        pathList.add(map);
+                        mPicPathList.add(map);
                     }
-                    continuePost("");
+                    closeCameraDevice();
                 }
             }
         }
@@ -163,11 +159,10 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
         @Override
         public void onImageAvailable(ImageReader reader) {
             File file = new File(FileUtils.getAppPath() + "/IMG_" + ImageUtils.setImageName() + ".jpg");
-            path = file.getAbsolutePath();
+            mPicSavePath = file.getAbsolutePath();
             FileOutputStream fileOutputStream;
             try {    //进行相片存储
                 fileOutputStream = new FileOutputStream(file);
-
                 Image image = reader.acquireNextImage();
                 ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                 byte[] bytes = new byte[buffer.remaining()];
@@ -182,28 +177,26 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
                     image.close();
                 }
 
-                if (!isSingle) {//单拍
-                    if (mCameraDevice != null) {
-                        mCameraDevice.close();
-                    }
+                if (isSingle) {//单拍
+                    closeCameraDevice();
                     //                    Uri sourceUri = Uri.fromFile(file);
                     //                    cropFile = new File(FileUtil.getAppPath() + "/IMG_" + ImageUtil.setImageName() + "_crop.jpg");
-                    //                    path = cropFile.getAbsolutePath();
+                    //                    mPicSavePath = cropFile.getAbsolutePath();
                     //                    Intent intent = new Intent(getContext(), MyIMGEditActivity.class);
                     //                    intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, sourceUri);
-                    //                    intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, path);
+                    //                    intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, mPicSavePath);
                     //                    getActivity().startActivityForResult(intent, REQ_IMAGE_EDIT);
                 } else {
                     mCamera2CameraHeaderSingle.setEnabled(false);
                     mCamera2CameraHeaderContinuous.setEnabled(false);
                     HashMap<String, String> map = new HashMap<>();
                     map.put("name", file.getName());
-                    map.put("path", path);
-                    pathList.add(map);
-                    if (pathList.size() > 0) {
+                    map.put("path", mPicSavePath);
+                    mPicPathList.add(map);
+                    if (mPicPathList.size() > 0) {
                         mCamera2ButtonImageNum.setVisibility(View.VISIBLE);
-                        mCamera2ButtonImageNum.setText(pathList.size() + "");
-                        Bitmap bitmap = BitmapFactory.decodeFile(pathList.get(pathList.size() - 1).get("path"));
+                        mCamera2ButtonImageNum.setText(mPicPathList.size() + "");
+                        Bitmap bitmap = BitmapFactory.decodeFile(mPicPathList.get(mPicPathList.size() - 1).get("path"));
                         Matrix m = new Matrix();
                         m.postRotate(90);
                         mCamera2ButtonImagePreview.setVisibility(View.VISIBLE);
@@ -237,10 +230,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
 
         @Override
         public void onDisconnected(@NonNull CameraDevice camera) {
-            if (mCameraDevice != null) {
-                mCameraDevice.close();
-                mCameraDevice = null;
-            }
+            closeCameraDevice();
         }
 
         @Override
@@ -355,9 +345,9 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
 
     @Override
     protected void setData() {
-        pathList = new ArrayList<>();
+        mPicPathList = new ArrayList<>();
         //图片选择callback
-        PicSelectActivity.setImageListCallback(mImageListCallback);
+        PicSelectActivity.setPicSelectCallback(mPicSelectCallback);
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         mDisplayRotation = display.getRotation();
     }
@@ -376,10 +366,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mCameraDevice != null) {
-            mCameraDevice.close();
-            mCameraDevice = null;
-        }
+        closeCameraDevice();
     }
 
     @Override
@@ -390,19 +377,18 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
                 getActivity().finish();
                 break;
             case R.id.camera2_camera_header_open_flash_lamp:
-                isOpenFlash = !isOpenFlash;
-                if (isOpenFlash) {
-                    openFlash();
-                } else {
-                    closeFlash();
-                }
+                changeFlashState();
                 break;
             case R.id.camera2_button_album:
-                PicSelectConfig mPicSelectConfig = new PicSelectConfig.Builder().multiSelect(false)
+                PicSelectConfig mPicSelectConfig = new PicSelectConfig.Builder()
+                        .multiSelect(false)
                         // 是否记住上次选中记录
-                        .rememberSelected(false).needCamera(false).multiSelect(multiSelect)
+                        .rememberSelected(false)
+                        .needCamera(false)
+                        .multiSelect(isMultiSelect)
                         // 使用沉浸式状态栏
-                        .statusBarColor(Color.parseColor("#3F51B5")).build();
+                        .statusBarColor(Color.parseColor("#3F51B5"))
+                        .build();
                 Intent intent = new Intent(getContext(), PicSelectActivity.class);
                 intent.putExtra("config", mPicSelectConfig);
                 startActivity(intent);
@@ -412,50 +398,38 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
                 takePicture();
                 break;
             case R.id.camera2_button_submit:
-                continuePost("camera");
+                closeCameraDevice();
                 break;
         }
     }
 
-    public void result(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQ_IMAGE_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
-                if (mCameraDevice != null) {
-                    mCameraDevice.close();
-                }
+                closeCameraDevice();
             }
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 0) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //用户同意，执行操作
-            }
-        }
-    }
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         int i = compoundButton.getId();
         if (i == R.id.camera2_camera_header_single && b) {
             mCamera2ButtonSubmit.setVisibility(View.GONE);
-            isSingle = false;
-            pathList.clear();
-            multiSelect = false;
+            isSingle = true;
+            mPicPathList.clear();
+            isMultiSelect = false;
         }
         if (i == R.id.camera2_camera_header_continuous && b) {
             mCamera2ButtonSubmit.setVisibility(View.VISIBLE);
             mCamera2ButtonAlbum.setVisibility(View.GONE);
-            isSingle = true;
-            multiSelect = true;
+            isSingle = false;
+            isMultiSelect = true;
         }
     }
 
-    /**
-     * TextureView的SurfaceTextureListener
-     */
+    // TextureView的SurfaceTextureListener---------------------------------------
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         initCameraAndPreview(width, height);
@@ -469,10 +443,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         //释放camera
-        if (mCameraDevice != null) {
-            mCameraDevice.close();
-            mCameraDevice = null;
-        }
+        closeCameraDevice();
         return false;
     }
 
@@ -480,7 +451,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
 
     }
-
+    // ----------------------------------------------------------------------------
 
     //初始化相机和预览设置
     @TargetApi(19)
@@ -495,61 +466,53 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
 
             mCameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
 
-            //动态申请camera权限--不加会报错
-            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
-            }
-            //            List<Size> sizes = getCameraOutputSizes(mCameraId, SurfaceTexture.class);
             //获取StreamConfigurationMap，它是管理摄像头支持的所有输出格式和尺寸
             CameraCharacteristics mCameraCharacteristics = mCameraManager.getCameraCharacteristics(mCameraId);
             StreamConfigurationMap configurationMap = mCameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            mPicTargetSize = new Size(width, height);
 
-            targetSize = new Size(width, height);
-
-            savePicSize = configurationMap.getOutputSizes(ImageFormat.JPEG);          //保存照片尺寸
-            previewSize = configurationMap.getOutputSizes(SurfaceTexture.class);        //预览尺寸
+            mPicSaveSize = configurationMap.getOutputSizes(ImageFormat.JPEG);          //保存照片尺寸
+            mPicPreviewSize = configurationMap.getOutputSizes(SurfaceTexture.class);        //预览尺寸
 
             //获取摄像头方向
             mCameraSensorOrientation = mCameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
             boolean exchange = exchangeWidthAndHeight(mDisplayRotation, mCameraSensorOrientation);
             if (exchange) {
-                bestSave = getBestSize(targetSize.getHeight(), targetSize.getWidth(), targetSize.getHeight(), targetSize.getWidth(), Arrays.asList(savePicSize));
-                bestPreview = getBestSize(targetSize.getHeight(), targetSize.getWidth(), targetSize.getHeight(), targetSize.getWidth(), Arrays.asList(previewSize));
+                mPicBestSaveSize = getBestSize(mPicTargetSize.getHeight(), mPicTargetSize.getWidth(), mPicTargetSize.getHeight(), mPicTargetSize.getWidth(), Arrays.asList(mPicSaveSize));
+                mPicBestPreviewSize = getBestSize(mPicTargetSize.getHeight(), mPicTargetSize.getWidth(), mPicTargetSize.getHeight(), mPicTargetSize.getWidth(), Arrays.asList(mPicPreviewSize));
             } else {
-                bestSave = getBestSize(targetSize.getWidth(), targetSize.getHeight(), targetSize.getWidth(), targetSize.getHeight(), Arrays.asList(savePicSize));
-                bestPreview = getBestSize(targetSize.getWidth(), targetSize.getHeight(), targetSize.getWidth(), targetSize.getHeight(), Arrays.asList(previewSize));
+                mPicBestSaveSize = getBestSize(mPicTargetSize.getWidth(), mPicTargetSize.getHeight(), mPicTargetSize.getWidth(), mPicTargetSize.getHeight(), Arrays.asList(mPicSaveSize));
+                mPicBestPreviewSize = getBestSize(mPicTargetSize.getWidth(), mPicTargetSize.getHeight(), mPicTargetSize.getWidth(), mPicTargetSize.getHeight(), Arrays.asList(mPicPreviewSize));
             }
             //            Log.i("yzl", "mAutoFixTextureView-------Size-----------------------height:" + mAutoFixTextureView.getHeight() + "----------------------width:" + mAutoFixTextureView.getWidth() + "-----------");
-            //            Log.i("yzl", "target-------Size-----------------------height:" + targetSize.getHeight() + "----------------------width:" + targetSize.getWidth() + "-----------");
-            //            Log.i("yzl", "save--best-------Size-----------------------height:" + bestSave.getHeight() + "----------------------width:" + bestSave.getWidth() + "-----------");
-            //            Log.i("yzl", "preview --best-------Size-----------------------height:" + bestPreview.getHeight() + "----------------------width:" + bestPreview.getWidth() + "-----------");
+            //            Log.i("yzl", "target-------Size-----------------------height:" + mPicTargetSize.getHeight() + "----------------------width:" + mPicTargetSize.getWidth() + "-----------");
+            //            Log.i("yzl", "save--best-------Size-----------------------height:" + mPicBestSaveSize.getHeight() + "----------------------width:" + mPicBestSaveSize.getWidth() + "-----------");
+            //            Log.i("yzl", "preview --best-------Size-----------------------height:" + mPicBestPreviewSize.getHeight() + "----------------------width:" + mPicBestPreviewSize.getWidth() + "-----------");
 
-            mAutoFixTextureView.setAspectRation(bestPreview.getWidth(), bestPreview.getHeight());
-            mAutoFixTextureView.getSurfaceTexture().setDefaultBufferSize(bestPreview.getWidth(), bestPreview.getHeight());
+            mAutoFixTextureView.setAspectRation(mPicBestPreviewSize.getWidth(), mPicBestPreviewSize.getHeight());
+            mAutoFixTextureView.getSurfaceTexture().setDefaultBufferSize(mPicBestPreviewSize.getWidth(), mPicBestPreviewSize.getHeight());
             // 设置ImageReader，用来读取拍摄图像的类
-            mImageReader = ImageReader.newInstance(bestSave.getWidth(), bestSave.getHeight(), ImageFormat.JPEG,/*maxImages*/2);
+            mImageReader = ImageReader.newInstance(mPicBestSaveSize.getWidth(), mPicBestSaveSize.getHeight(), ImageFormat.JPEG,/*maxImages*/2);
             //这里必须传入mainHandler，因为涉及到了Ui操作
             mImageReader.setOnImageAvailableListener(mOnImageAvailableListener, mainHandler);
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(mContext, "未取得摄像头授权，请到手机设置中进行授权", Toast.LENGTH_SHORT).show();
+                return;
+            }
             mCameraManager.openCamera(mCameraId, deviceStateCallback, mHandler);
         } catch (CameraAccessException e) {
-            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "打开相机失败", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void openFlash() {
-        mPreviewBuilder.set(CaptureRequest.FLASH_MODE,
-                            CaptureRequest.FLASH_MODE_TORCH);
+    private void changeFlashState() {
         try {
-            mSession.setRepeatingRequest(mPreviewBuilder.build(), mSessionCaptureCallback, mHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void closeFlash() {
-        mPreviewBuilder.set(CaptureRequest.FLASH_MODE,
-                            CaptureRequest.FLASH_MODE_OFF);
-        try {
+            isOpenFlash = !isOpenFlash;
+            if (isOpenFlash) {
+                mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+            } else {
+                mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+            }
             mSession.setRepeatingRequest(mPreviewBuilder.build(), mSessionCaptureCallback, mHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -587,7 +550,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     private class CompareSizesByArea implements Comparator<Size> {
         @Override
         public int compare(Size size1, Size size2) {
-            return java.lang.Long.signum(size1.getWidth() * size1.getHeight() - size2.getWidth() * size2.getHeight());
+            return Long.signum(size1.getWidth() * size1.getHeight() - size2.getWidth() * size2.getHeight());
         }
     }
 
@@ -598,10 +561,6 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
         boolean exchange = false;
         switch (displayRotation) {
             case Surface.ROTATION_0:
-                if (sensorOrientation == 90 || sensorOrientation == 270) {
-                    exchange = true;
-                }
-                break;
             case Surface.ROTATION_180:
                 if (sensorOrientation == 90 || sensorOrientation == 270) {
                     exchange = true;
@@ -723,10 +682,11 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
         return jpegOrientation;
     }
 
-    public void continuePost(String from) {
+    public void closeCameraDevice() {
         if (mCameraDevice != null) {
             //停止预览
             mCameraDevice.close();
+            mCameraDevice = null;
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.divine.yang.camera2component.imageselect;
+package com.divine.yang.camera2component.imageselect.interfaces;
 
 import java.io.File;
 import java.io.Serializable;
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * CreateDate: 2020/10/20
  * Describe:
  */
-public interface PicSelectCallback extends Serializable {
+public interface PicSelectListener extends Serializable {
 
     void onSingleImageSelected(String path);
 

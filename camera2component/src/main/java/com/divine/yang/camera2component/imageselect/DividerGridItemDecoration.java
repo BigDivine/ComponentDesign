@@ -81,7 +81,7 @@ class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    private boolean isLastColum(RecyclerView parent, int pos, int spanCount,
+    private boolean isLastColumn(RecyclerView parent, int pos, int spanCount,
                                 int childCount) {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
@@ -142,7 +142,7 @@ class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         if (isLastRaw(parent, itemPosition, spanCount, childCount))// 如果是最后一行，则不需要绘制底部
         {
             outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
-        } else if (isLastColum(parent, itemPosition, spanCount, childCount))// 如果是最后一列，则不需要绘制右边
+        } else if (isLastColumn(parent, itemPosition, spanCount, childCount))// 如果是最后一列，则不需要绘制右边
         {
             outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
         } else {
