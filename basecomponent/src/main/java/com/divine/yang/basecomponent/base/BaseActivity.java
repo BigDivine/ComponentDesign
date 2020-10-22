@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.divine.yang.basecomponent.utils.ActivitiesManager;

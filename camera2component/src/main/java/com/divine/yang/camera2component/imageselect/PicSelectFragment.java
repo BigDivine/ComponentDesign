@@ -14,19 +14,22 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.divine.yang.basecomponent.base.BaseFragment;
 import com.divine.yang.camera2component.PicSelectActivity;
 import com.divine.yang.camera2component.R;
 import com.divine.yang.camera2component.imageselect.interfaces.OnFolderChangeListener;
-import com.divine.yang.camera2component.imageselect.interfaces.OnItemClickListener;
+import com.divine.yang.camera2component.imageselect.interfaces.OnPicSelectFragmentRvItemClickListener;
 import com.divine.yang.camera2component.imageselect.interfaces.PicSelectListener;
 
 import java.io.File;
@@ -53,20 +56,20 @@ import androidx.viewpager.widget.ViewPager;
 public class PicSelectFragment extends BaseFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private RecyclerView mRvPicSelectFragmentImgList;
+    private PicSelectFragmentRvAdapter mPicSelectFragmentRvAdapter;
     private Button mBtnPicSelectFragmentBottomAlbumSelect;
     private View mRlPicSelectFragmentBottomLayout;
     private CustomViewPager mCvpPicSelectFragmentPicPreview;
-
+    private PicSelectFragmentVpAdapter mPicSelectFragmentVpAdapter;
     private PicSelectConfig mPicSelectConfig;
     private PicSelectListener mPicSelectListener;
     private List<Folder> mFolderList = new ArrayList<>();
     private List<Image> mImageList = new ArrayList<>();
 
-    private ListPopupWindow folderPopupWindow;
-    private FolderListAdapter folderListAdapter;
+    //    private ListPopupWindow folderPopupWindow;
+    private PopupWindow popupWindow;
+    private PicSelectFragmentPopRvAdapter mPicSelectFragmentPopRvAdapter;
 
-    private PreviewAdapter previewAdapter;
-    private ImageListsAdapter imageListAdapter;
 
     private boolean hasFolderGened = false;
 
@@ -120,37 +123,33 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
 
         mBtnPicSelectFragmentBottomAlbumSelect.setText(mPicSelectConfig.allImagesText);
 
-        mRvPicSelectFragmentImgList.setLayoutManager(new GridLayoutManager(mRvPicSelectFragmentImgList.getContext(), 3));
-        mRvPicSelectFragmentImgList.addItemDecoration(new DividerGridItemDecoration(mRvPicSelectFragmentImgList.getContext()));
-        if (mPicSelectConfig.needCamera)
+        mRvPicSelectFragmentImgList.setLayoutManager(new GridLayoutManager(mContext, 3));
+        mRvPicSelectFragmentImgList.addItemDecoration(new DividerGridItemDecoration(mContext));
+        if (mPicSelectConfig.needCamera) {
             mImageList.add(new Image());
+        }
+        mPicSelectFragmentRvAdapter = new PicSelectFragmentRvAdapter(mContext, mImageList, mPicSelectConfig);
+        mRvPicSelectFragmentImgList.setAdapter(mPicSelectFragmentRvAdapter);
 
-        imageListAdapter = new ImageListsAdapter(getActivity(), mImageList, mPicSelectConfig);
-        imageListAdapter.setShowCamera(mPicSelectConfig.needCamera);
-        imageListAdapter.setMutiSelect(mPicSelectConfig.multiSelect);
-        mRvPicSelectFragmentImgList.setAdapter(imageListAdapter);
-        imageListAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mPicSelectFragmentRvAdapter.setShowCamera(mPicSelectConfig.needCamera);
+        mPicSelectFragmentRvAdapter.setMultiSelect(mPicSelectConfig.multiSelect);
+        mPicSelectFragmentRvAdapter.setListener(new OnPicSelectFragmentRvItemClickListener() {
             @Override
-            public int onCheckedClick(int position, Image image) {
-                return checkedImage(position, image);
-            }
-
-            @Override
-            public void onImageClick(int position, Image image) {
+            public void onItemClick(View view, int position, Image item) {
                 if (mPicSelectConfig.needCamera && position == 0) {
                     showCameraAction();
                 } else {
                     if (mPicSelectConfig.multiSelect) {
-                        mCvpPicSelectFragmentPicPreview.setAdapter((previewAdapter = new PreviewAdapter(getActivity(), mImageList, mPicSelectConfig)));
-                        previewAdapter.setListener(new OnItemClickListener() {
+                        mCvpPicSelectFragmentPicPreview.setAdapter((mPicSelectFragmentVpAdapter = new PicSelectFragmentVpAdapter(getActivity(), mImageList, mPicSelectConfig)));
+                        mPicSelectFragmentVpAdapter.setListener(new OnPicSelectFragmentRvItemClickListener() {
                             @Override
-                            public int onCheckedClick(int position, Image image) {
-                                return checkedImage(position, image);
+                            public void onItemClick(View view, int position, Image item) {
+                                hidePreview();
                             }
 
                             @Override
-                            public void onImageClick(int position, Image image) {
-                                hidePreview();
+                            public int onItemCheckClick(View view, int position, Image item) {
+                                return checkedImage(position, item);
                             }
                         });
                         if (mPicSelectConfig.needCamera) {
@@ -162,16 +161,22 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
                         mCvpPicSelectFragmentPicPreview.setVisibility(View.VISIBLE);
                     } else {
                         if (mPicSelectListener != null) {
-                            mPicSelectListener.onSingleImageSelected(image.path);
+                            mPicSelectListener.onSingleImageSelected(item.path);
                         }
                     }
                 }
             }
+
+            @Override
+            public int onItemCheckClick(View view, int position, Image item) {
+                return checkedImage(position, item);
+            }
         });
 
-        folderListAdapter = new FolderListAdapter(getActivity(), mFolderList, mPicSelectConfig);
+        mPicSelectFragmentPopRvAdapter = new PicSelectFragmentPopRvAdapter(getActivity(), mFolderList, mPicSelectConfig);
 
-        getActivity().getSupportLoaderManager().initLoader(LOADER_ALL, null, mLoaderCallback);
+//        getActivity().getSupportLoaderManager().initLoader(LOADER_ALL, null, mLoaderCallback);
+        getActivity().getSupportLoaderManager().initLoader(LOADER_CATEGORY, null, mLoaderCallback);
     }
 
     private int checkedImage(int position, Image image) {
@@ -265,8 +270,8 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
                         mImageList.add(new Image());
                     mImageList.addAll(tempImageList);
 
-                    imageListAdapter.notifyDataSetChanged();
-                    folderListAdapter.notifyDataSetChanged();
+                    mPicSelectFragmentRvAdapter.notifyDataSetChanged();
+                    mPicSelectFragmentPopRvAdapter.notifyDataSetChanged();
 
                     hasFolderGened = true;
                 }
@@ -280,18 +285,21 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
     };
 
     private void createPopupFolderList(int width, int height) {
-        folderPopupWindow = new ListPopupWindow(getActivity());
-        folderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#aaaaaa")));
-        folderPopupWindow.setAdapter(folderListAdapter);
-        folderPopupWindow.setContentWidth(width);
-        folderPopupWindow.setWidth(width);
-        folderPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        folderPopupWindow.setAnchorView(mRlPicSelectFragmentBottomLayout);
-        folderPopupWindow.setModal(true);
-        folderListAdapter.setOnFloderChangeListener(new OnFolderChangeListener() {
+        View rootView = LayoutInflater.from(mContext).inflate(R.layout.common_layout_with_rv, null);
+        rootView.setLayoutParams(new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
+        RecyclerView commonRecyclerView = rootView.findViewById(R.id.common_layout_rv);
+        popupWindow = new PopupWindow(getActivity());
+        popupWindow.setWidth(width);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(rootView);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#aaaaaa")));
+
+        commonRecyclerView.setAdapter(mPicSelectFragmentPopRvAdapter);
+
+        mPicSelectFragmentPopRvAdapter.setOnFolderChangeListener(new OnFolderChangeListener() {
             @Override
             public void onChange(int position, Folder folder) {
-                folderPopupWindow.dismiss();
+                popupWindow.dismiss();
                 if (position == 0) {
                     getActivity().getSupportLoaderManager().restartLoader(LOADER_ALL, null, mLoaderCallback);
                     mBtnPicSelectFragmentBottomAlbumSelect.setText(mPicSelectConfig.allImagesText);
@@ -300,13 +308,14 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
                     if (mPicSelectConfig.needCamera)
                         mImageList.add(new Image());
                     mImageList.addAll(folder.images);
-                    imageListAdapter.notifyDataSetChanged();
+                    mPicSelectFragmentRvAdapter.notifyDataSetChanged();
 
                     mBtnPicSelectFragmentBottomAlbumSelect.setText(folder.name);
                 }
             }
         });
-        folderPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 setBackgroundAlpha(1.0f);
@@ -325,36 +334,37 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
         WindowManager wm = getActivity().getWindowManager();
         final int size = wm.getDefaultDisplay().getWidth() / 3 * 2;
         if (v.getId() == mBtnPicSelectFragmentBottomAlbumSelect.getId()) {
-            if (folderPopupWindow == null) {
+            if (popupWindow == null) {
                 createPopupFolderList(size, size);
             }
 
-            if (folderPopupWindow.isShowing()) {
-                folderPopupWindow.dismiss();
+            if (popupWindow.isShowing()) {
+                popupWindow.dismiss();
             } else {
-                folderPopupWindow.show();
-                if (folderPopupWindow.getListView() != null) {
-                    folderPopupWindow.getListView().setDivider(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.bottom_bg)));
-                }
-                int index = folderListAdapter.getSelectIndex();
+                //                popupWindow.show();
+                popupWindow.showAsDropDown(mRlPicSelectFragmentBottomLayout);
+                //                if (popupWindow.getListView() != null) {
+                //                    popupWindow.getListView().setDivider(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.bottom_bg)));
+                //                }
+                int index = mPicSelectFragmentPopRvAdapter.getSelectIndex();
                 index = index == 0 ? index : index - 1;
-                folderPopupWindow.getListView().setSelection(index);
+                //                popupWindow.getListView().setSelection(index);
 
-                folderPopupWindow.getListView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                            folderPopupWindow.getListView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        } else {
-                            folderPopupWindow.getListView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                        int h = folderPopupWindow.getListView().getMeasuredHeight();
-                        if (h > size) {
-                            folderPopupWindow.setHeight(size);
-                            folderPopupWindow.show();
-                        }
-                    }
-                });
+                //                popupWindow.getListView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                //                    @Override
+                //                    public void onGlobalLayout() {
+                //                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                //                            popupWindow.getListView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                //                        } else {
+                //                            popupWindow.getListView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                //                        }
+                //                        int h = popupWindow.getListView().getMeasuredHeight();
+                //                        if (h > size) {
+                //                            popupWindow.setHeight(size);
+                //                            popupWindow.show();
+                //                        }
+                //                    }
+                //                });
                 setBackgroundAlpha(0.6f);
             }
         }
@@ -455,7 +465,7 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
         if (mCvpPicSelectFragmentPicPreview.getVisibility() == View.VISIBLE) {
             mCvpPicSelectFragmentPicPreview.setVisibility(View.GONE);
             mPicSelectListener.onPreviewChanged(0, 0, false);
-            imageListAdapter.notifyDataSetChanged();
+            mPicSelectFragmentRvAdapter.notifyDataSetChanged();
             return true;
         } else {
             return false;

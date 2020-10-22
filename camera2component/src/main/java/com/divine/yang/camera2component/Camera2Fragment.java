@@ -302,7 +302,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
 
     @Override
     public int setContentView() {
-        return R.layout.camera2_fragment_layout;
+        return R.layout.fragment_camera2_layout;
     }
 
 
@@ -381,7 +381,6 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
                 break;
             case R.id.camera2_button_album:
                 PicSelectConfig mPicSelectConfig = new PicSelectConfig.Builder()
-                        .multiSelect(false)
                         // 是否记住上次选中记录
                         .rememberSelected(false)
                         .needCamera(false)
@@ -423,7 +422,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
         }
         if (i == R.id.camera2_camera_header_continuous && b) {
             mCamera2ButtonSubmit.setVisibility(View.VISIBLE);
-            mCamera2ButtonAlbum.setVisibility(View.GONE);
+            mCamera2ButtonImageNum.setVisibility(View.GONE);
             isSingle = false;
             isMultiSelect = true;
         }

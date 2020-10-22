@@ -3,7 +3,7 @@
     package="com.divine.yang.camera2component">
 
     <application>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Camera2DemoActivity"></activity>
     </application>
 
 </manifest>

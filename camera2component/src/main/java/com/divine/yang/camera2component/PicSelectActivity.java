@@ -8,14 +8,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.divine.yang.basecomponent.BaseDemoActivity;
 import com.divine.yang.basecomponent.base.BaseActivity;
 import com.divine.yang.basecomponent.getpermission.PermissionList;
 import com.divine.yang.camera2component.imageselect.FileUtils;
@@ -61,11 +65,40 @@ public class PicSelectActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public View getToolbar() {
-        return null;
+        View actionBar = LayoutInflater.from(this).inflate(com.divine.yang.basecomponent.R.layout.action_bar_layout, null, false);
+        View actionBarRes = LayoutInflater.from(this).inflate(com.divine.yang.basecomponent.R.layout.action_bar_normal, null, false);
+        LinearLayout actionBarContain = actionBar.findViewById(com.divine.yang.basecomponent.R.id.action_bar_res);
+        actionBarContain.removeAllViews();
+        actionBarContain.addView(actionBarRes);
+
+        View leftLayout = actionBarRes.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_left);
+        leftLayout.setVisibility(View.VISIBLE);
+        leftLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PicSelectActivity.this, "left layout button click", Toast.LENGTH_SHORT).show();
+                PicSelectActivity.this.finish();
+            }
+        });
+
+        View centerLayout = actionBarRes.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_center);
+        centerLayout.setVisibility(View.VISIBLE);
+        TextView headerTitle = centerLayout.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_title);
+        headerTitle.setText("照片");
+
+        View rightLayout = actionBarRes.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_right);
+        rightLayout.setVisibility(View.VISIBLE);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        actionBar.setLayoutParams(params);
+
+        return actionBar;
     }
 
     @Override
     public void initView() {
+        mPicSelectConfig = (PicSelectConfig) getIntent().getSerializableExtra("config");
+
         mPicSelectFragment = PicSelectFragment.instance();
         getSupportFragmentManager()
                 .beginTransaction()

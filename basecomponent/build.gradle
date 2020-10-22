@@ -32,6 +32,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    api androidxTest.TestExtJunit
+    api androidxTest.EspressoCore
+    api Junits.Junit
     api androidx.AppCompat
     api androidx.ConstraintLayout
     api wmRouter.Router
