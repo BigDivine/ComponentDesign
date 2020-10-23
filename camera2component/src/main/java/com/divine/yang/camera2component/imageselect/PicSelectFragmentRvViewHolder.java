@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * CreateDate: 2020/10/22
  * Describe:
  */
-class PicSelectFragmentRvViewHolder extends RecyclerView.ViewHolder {
+public class PicSelectFragmentRvViewHolder extends RecyclerView.ViewHolder {
     public ImageView mAdapterPicSelectFragmentRvItemImg,mAdapterPicSelectFragmentRvItemCheck;
     private View itemView;
 

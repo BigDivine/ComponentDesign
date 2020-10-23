@@ -2,13 +2,16 @@ package com.divine.yang.camera2component.imageselect;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.divine.yang.camera2component.R;
 import com.divine.yang.camera2component.imageselect.interfaces.OnPicSelectFragmentRvItemClickListener;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -35,7 +38,7 @@ public class PicSelectFragmentRvAdapter extends RecyclerView.Adapter<PicSelectFr
     @NonNull
     @Override
     public PicSelectFragmentRvViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(mContext).inflate(R.layout.adapter_pic_select_fragment_rv_item, parent,false);
+        View rootView = LayoutInflater.from(mContext).inflate(R.layout.adapter_pic_select_fragment_rv_item, parent, false);
         PicSelectFragmentRvViewHolder mPicSelectFragmentRvViewHolder = new PicSelectFragmentRvViewHolder(rootView);
         return mPicSelectFragmentRvViewHolder;
     }
@@ -80,7 +83,17 @@ public class PicSelectFragmentRvAdapter extends RecyclerView.Adapter<PicSelectFr
                     listener.onItemClick(view, position, itemData);
             }
         });
-        holder.mAdapterPicSelectFragmentRvItemImg.setImageBitmap(BitmapFactory.decodeFile(itemData.path));
+        //        if (isScrolling) {
+        //            Glide.with(mContext).load(R.mipmap.ic_default_image).into(holder.mAdapterPicSelectFragmentRvItemImg);
+        //        } else {
+        Glide.with(mContext)
+                .asBitmap()
+                .placeholder(R.mipmap.ic_default_image)
+                //                    .load(BitmapFactory.decodeFile(itemData.path))
+                .load(Uri.fromFile(new File(itemData.path)))
+//                .override(100, 100)
+                .into(holder.mAdapterPicSelectFragmentRvItemImg);
+        //        }
         if (multiSelect) {
             holder.mAdapterPicSelectFragmentRvItemCheck.setVisibility(View.VISIBLE);
             if (PicSelectStaticVariable.mPicSelectImageList.contains(itemData.path)) {

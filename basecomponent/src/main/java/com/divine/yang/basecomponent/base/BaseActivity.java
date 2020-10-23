@@ -7,10 +7,16 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.divine.yang.basecomponent.BaseDemoActivity;
+import com.divine.yang.basecomponent.R;
 import com.divine.yang.basecomponent.utils.ActivitiesManager;
 import com.divine.yang.basecomponent.getpermission.PermissionPageUtils;
 import com.divine.yang.basecomponent.getpermission.PermissionUtil;
@@ -43,7 +49,37 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract boolean showToolbar();
 
-    public abstract View getToolbar();
+    public View getToolbar() {
+
+        View actionBar = LayoutInflater.from(this).inflate(R.layout.action_bar_layout, null, false);
+        View leftLayout = actionBar.findViewById(R.id.action_bar_left);
+        leftLayout.setVisibility(View.VISIBLE);
+        leftLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BaseActivity.this, "left layout button click", Toast.LENGTH_SHORT).show();
+                BaseActivity.this.finish();
+            }
+        });
+
+        View centerLayout = actionBar.findViewById(R.id.action_bar_center);
+        centerLayout.setVisibility(View.VISIBLE);
+        TextView headerTitle = centerLayout.findViewById(R.id.action_bar_title);
+        headerTitle.setText("这是标题");
+
+        View rightLayout = actionBar.findViewById(R.id.action_bar_right);
+        rightLayout.setVisibility(View.VISIBLE);
+        rightLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BaseActivity.this, "right layout button click", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        actionBar.setLayoutParams(params);
+        return actionBar;
+    }
 
     /**
      * 初始化控件

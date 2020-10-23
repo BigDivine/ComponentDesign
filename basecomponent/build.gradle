@@ -35,12 +35,16 @@ dependencies {
     api androidxTest.TestExtJunit
     api androidxTest.EspressoCore
     api Junits.Junit
+    api androidx.RecyclerView
     api androidx.AppCompat
     api androidx.ConstraintLayout
+
     api wmRouter.Router
+    api glide.Glide
+    api facebook.Fresco
 
     implementation androidx.NavigationUI
     implementation androidx.NavigationFragment
-    implementation 'com.google.android.material:material:1.2.1'
-    annotationProcessor wmRouter.RouterCompiler
+    implementation googleAndroid.Material
+
 }

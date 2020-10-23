@@ -33,7 +33,7 @@ android {
         main {
             if (isCamera2RunAlone.toBoolean()) {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
-            }else {
+            } else {
                 manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
             }
         }
@@ -75,10 +75,9 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":basecomponent")
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
-    implementation 'androidx.navigation:navigation-fragment:2.3.1'
-    implementation 'androidx.navigation:navigation-ui:2.3.1'
+    implementation googleAndroid.Material
+    implementation androidx.NavigationUI
+    implementation androidx.NavigationFragment
     annotationProcessor wmRouter.RouterCompiler
+    annotationProcessor glide.GlideCompiler
 }

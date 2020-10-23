@@ -5,32 +5,29 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.divine.yang.basecomponent.BaseDemoActivity;
 import com.divine.yang.basecomponent.base.BaseActivity;
 import com.divine.yang.basecomponent.getpermission.PermissionList;
 import com.divine.yang.camera2component.imageselect.FileUtils;
 import com.divine.yang.camera2component.imageselect.PicSelectConfig;
-import com.divine.yang.camera2component.imageselect.PicSelectFragment;
 import com.divine.yang.camera2component.imageselect.PicSelectStaticVariable;
 import com.divine.yang.camera2component.imageselect.interfaces.PicSelectCallback;
 import com.divine.yang.camera2component.imageselect.interfaces.PicSelectListener;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * Author: Divine
@@ -42,9 +39,9 @@ public class PicSelectActivity extends BaseActivity implements View.OnClickListe
     private static final int IMAGE_CROP_CODE = 1;
     private String mCropImagePath;
 
-    private RelativeLayout mPicSelectHeaderLayout;
+    private ConstraintLayout mPicSelectHeaderLayout;
     private TextView mPicSelectHeaderTitle;
-    private Button mPicSelectHeaderConfirm;
+    private TextView mPicSelectHeaderConfirm;
     private ImageButton mPicSelectHeaderBack;
 
     private PicSelectConfig mPicSelectConfig;
@@ -60,57 +57,54 @@ public class PicSelectActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public boolean showToolbar() {
-        return false;
+        return true;
     }
 
-    @Override
     public View getToolbar() {
-        View actionBar = LayoutInflater.from(this).inflate(com.divine.yang.basecomponent.R.layout.action_bar_layout, null, false);
-        View actionBarRes = LayoutInflater.from(this).inflate(com.divine.yang.basecomponent.R.layout.action_bar_normal, null, false);
-        LinearLayout actionBarContain = actionBar.findViewById(com.divine.yang.basecomponent.R.id.action_bar_res);
-        actionBarContain.removeAllViews();
-        actionBarContain.addView(actionBarRes);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        View leftLayout = actionBarRes.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_left);
+        View actionBar = LayoutInflater.from(this).inflate(R.layout.action_bar_layout, null, false);
+        mPicSelectHeaderLayout = actionBar.findViewById(R.id.action_bar_layout);
+
+        LinearLayout leftLayout = actionBar.findViewById(R.id.action_bar_left);
         leftLayout.setVisibility(View.VISIBLE);
-        leftLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(PicSelectActivity.this, "left layout button click", Toast.LENGTH_SHORT).show();
-                PicSelectActivity.this.finish();
-            }
-        });
+        mPicSelectHeaderBack = leftLayout.findViewById(R.id.action_bar_back);
+        mPicSelectHeaderBack.setOnClickListener(this);
 
-        View centerLayout = actionBarRes.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_center);
+        LinearLayout centerLayout = actionBar.findViewById(R.id.action_bar_center);
         centerLayout.setVisibility(View.VISIBLE);
-        TextView headerTitle = centerLayout.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_title);
-        headerTitle.setText("照片");
+        mPicSelectHeaderTitle = centerLayout.findViewById(R.id.action_bar_title);
+        mPicSelectHeaderTitle.setText("这是标题");
 
-        View rightLayout = actionBarRes.findViewById(com.divine.yang.basecomponent.R.id.normal_action_bar_right);
+        LinearLayout  rightLayout = actionBar.findViewById(R.id.action_bar_right);
         rightLayout.setVisibility(View.VISIBLE);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+         mPicSelectHeaderConfirm = new TextView(this);
+        mPicSelectHeaderConfirm.setText("确定");
+        rightLayout.addView(mPicSelectHeaderConfirm);
+
         actionBar.setLayoutParams(params);
 
         return actionBar;
     }
 
+
     @Override
     public void initView() {
         mPicSelectConfig = (PicSelectConfig) getIntent().getSerializableExtra("config");
-
         mPicSelectFragment = PicSelectFragment.instance();
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.pic_select_images_frame, mPicSelectFragment, null)
                 .commit();
+View toolbar=getToolbar();
 
-        mPicSelectHeaderLayout = findViewById(R.id.pic_select_header_layout);
-        mPicSelectHeaderTitle = findViewById(R.id.pic_select_header_title);
-        mPicSelectHeaderConfirm = findViewById(R.id.pic_select_header_confirm);
-        mPicSelectHeaderBack = findViewById(R.id.pic_select_header_back);
-        mPicSelectHeaderConfirm.setOnClickListener(this);
-        mPicSelectHeaderBack.setOnClickListener(this);
+        //        mPicSelectHeaderLayout = findViewById(R.id.pic_select_header_layout);
+        //        mPicSelectHeaderTitle = findViewById(R.id.pic_select_header_title);
+        //        mPicSelectHeaderConfirm = findViewById(R.id.pic_select_header_confirm);
+        //        mPicSelectHeaderBack = findViewById(R.id.pic_select_header_back);
+        //        mPicSelectHeaderConfirm.setOnClickListener(this);
+        //        mPicSelectHeaderBack.setOnClickListener(this);
 
         if (mPicSelectConfig != null) {
             initConfig();
@@ -126,14 +120,6 @@ public class PicSelectActivity extends BaseActivity implements View.OnClickListe
     private void initConfig() {
         if (mPicSelectConfig.backResId != -1) {
             mPicSelectHeaderBack.setImageResource(mPicSelectConfig.backResId);
-        }
-        if (mPicSelectConfig.statusBarColor != -1) {
-            StatusBarCompat.compat(this, mPicSelectConfig.statusBarColor);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                    && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            }
         }
         mPicSelectHeaderLayout.setBackgroundColor(mPicSelectConfig.titleBgColor);
         mPicSelectHeaderTitle.setTextColor(mPicSelectConfig.titleColor);
@@ -164,13 +150,13 @@ public class PicSelectActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.pic_select_header_confirm) {
+        if (id == mPicSelectHeaderConfirm.getId()) {
             if (PicSelectStaticVariable.mPicSelectImageList != null && !PicSelectStaticVariable.mPicSelectImageList.isEmpty()) {
                 exitPicSelectActivity();
             } else {
                 Toast.makeText(this, "最少选择一张图片", Toast.LENGTH_SHORT).show();
             }
-        } else if (id == R.id.pic_select_header_back) {
+        } else if (id == mPicSelectHeaderBack.getId()) {
             onBackPressed();
         }
     }
@@ -296,6 +282,7 @@ public class PicSelectActivity extends BaseActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
     }
+
     public void exitPicSelectActivity() {
         finish();
         mPicSelectImagesResult.clear();

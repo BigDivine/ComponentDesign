@@ -89,5 +89,5 @@ dependencies {
         implementation project(":widgetcomponent")
     }
     annotationProcessor wmRouter.RouterCompiler
-
+    annotationProcessor glide.GlideCompiler
 }

@@ -31,11 +31,6 @@ public class Camera2DemoActivity extends BaseActivity {
     }
 
     @Override
-    public View getToolbar() {
-        return null;
-    }
-
-    @Override
     public void initView() {
         mCamera2Fragment = new Camera2Fragment();
         Bundle bundle = new Bundle();

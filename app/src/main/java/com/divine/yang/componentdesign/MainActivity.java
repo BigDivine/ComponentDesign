@@ -18,11 +18,6 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public View getToolbar() {
-        return null;
-    }
-
-    @Override
     public void initView() {
 
     }

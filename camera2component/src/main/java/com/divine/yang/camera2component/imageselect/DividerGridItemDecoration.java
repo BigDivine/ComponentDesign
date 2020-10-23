@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
  * CreateDate: 2020/10/20
  * Describe:
  */
-class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
+public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
     private Drawable mDivider;
 

@@ -27,7 +27,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void initView(View view);
 
     // 对数据进行初始化
-    protected abstract void setData();
+    protected abstract void getData();
 
     // 布局id
     public abstract int setContentView();
@@ -52,7 +52,7 @@ public abstract class BaseFragment extends Fragment {
         View view = inflater.inflate(setContentView(), null);
 
         initView(view);
-        setData();
+        getData();
         return view;
     }
 

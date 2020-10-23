@@ -82,6 +82,7 @@ dependencies {
     implementation retrofit2.AdapterRxjava2
     implementation rxjava2.Rxjava
     implementation rxjava2.Rxandroid
-    annotationProcessor wmRouter.RouterCompiler
 
+    annotationProcessor wmRouter.RouterCompiler
+    annotationProcessor glide.GlideCompiler
 }

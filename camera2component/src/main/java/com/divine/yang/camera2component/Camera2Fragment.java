@@ -344,7 +344,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     }
 
     @Override
-    protected void setData() {
+    protected void getData() {
         mPicPathList = new ArrayList<>();
         //图片选择callback
         PicSelectActivity.setPicSelectCallback(mPicSelectCallback);

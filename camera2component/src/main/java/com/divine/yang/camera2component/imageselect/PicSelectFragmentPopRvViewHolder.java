@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * CreateDate: 2020/10/22
  * Describe:
  */
-class PicSelectFragmentPopRvViewHolder extends RecyclerView.ViewHolder {
+public class PicSelectFragmentPopRvViewHolder extends RecyclerView.ViewHolder {
     public ImageView mAdapterPicSelectFragmentPopRvItemImg, mAdapterPicSelectFragmentPopRvItemSelect;
     public TextView mAdapterPicSelectFragmentPopRvItemTitle, mAdapterPicSelectFragmentPopRvItemNum;
     private View itemView;

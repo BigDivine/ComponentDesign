@@ -1,15 +1,18 @@
 package com.divine.yang.camera2component.imageselect;
 
-import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.divine.yang.camera2component.R;
 import com.divine.yang.camera2component.imageselect.interfaces.OnPicSelectFragmentRvItemClickListener;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -20,14 +23,14 @@ import androidx.viewpager.widget.PagerAdapter;
  * CreateDate: 2020/10/22
  * Describe:
  */
-class PicSelectFragmentVpAdapter extends PagerAdapter {
-    private Activity activity;
+public class PicSelectFragmentVpAdapter extends PagerAdapter {
+    private Context mContext;
     private List<Image> images;
     private PicSelectConfig config;
     private OnPicSelectFragmentRvItemClickListener listener;
 
-    public PicSelectFragmentVpAdapter(Activity activity, List<Image> images, PicSelectConfig config) {
-        this.activity = activity;
+    public PicSelectFragmentVpAdapter(Context mContext, List<Image> images, PicSelectConfig config) {
+        this.mContext = mContext;
         this.images = images;
         this.config = config;
     }
@@ -35,7 +38,7 @@ class PicSelectFragmentVpAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        View rootView = LayoutInflater.from(activity).inflate(R.layout.adapter_pic_select_fragment_vp_item, container, false);
+        View rootView = LayoutInflater.from(mContext).inflate(R.layout.adapter_pic_select_fragment_vp_item, container, false);
         ImageView mAdapterPicSelectFragmentVpItemImg = rootView.findViewById(R.id.adapter_pic_select_fragment_vp_item_img);
         ImageButton mAdapterPicSelectFragmentVpItemCheck = rootView.findViewById(R.id.adapter_pic_select_fragment_vp_item_check);
         if (config.multiSelect) {
@@ -46,6 +49,7 @@ class PicSelectFragmentVpAdapter extends PagerAdapter {
             } else {
                 mAdapterPicSelectFragmentVpItemCheck.setImageResource(R.mipmap.ic_uncheck);
             }
+            Glide.with(mContext).load(Uri.fromFile(new File(image.path))).into(mAdapterPicSelectFragmentVpItemImg);
             mAdapterPicSelectFragmentVpItemCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

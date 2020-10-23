@@ -18,7 +18,7 @@ public class MainFragment extends BaseFragment {
     }
 
     @Override
-    protected void setData() {
+    protected void getData() {
 
     }
 

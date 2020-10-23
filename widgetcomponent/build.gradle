@@ -78,5 +78,6 @@ dependencies {
     implementation androidx.NavigationFragment
     implementation androidx.LifecycleExtensions
     implementation googleAndroid.Material
+
     annotationProcessor wmRouter.RouterCompiler
-}
+    annotationProcessor glide.GlideCompiler}
