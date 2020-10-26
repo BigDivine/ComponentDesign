@@ -39,6 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private String[] requestPermissions;
     // requestCode for require permissions:请求权限的requestCode
     private final int REQUEST_PERMISSION_REQUEST_CODE = 1000;
+    private BaseToolbar mBaseToolbar;
 
     /**
      * 获取布局的id
@@ -49,36 +50,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract boolean showToolbar();
 
-    public View getToolbar() {
-
-        View actionBar = LayoutInflater.from(this).inflate(R.layout.action_bar_layout, null, false);
-        View leftLayout = actionBar.findViewById(R.id.action_bar_left);
-        leftLayout.setVisibility(View.VISIBLE);
-        leftLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BaseActivity.this, "left layout button click", Toast.LENGTH_SHORT).show();
-                BaseActivity.this.finish();
-            }
-        });
-
-        View centerLayout = actionBar.findViewById(R.id.action_bar_center);
-        centerLayout.setVisibility(View.VISIBLE);
-        TextView headerTitle = centerLayout.findViewById(R.id.action_bar_title);
-        headerTitle.setText("这是标题");
-
-        View rightLayout = actionBar.findViewById(R.id.action_bar_right);
-        rightLayout.setVisibility(View.VISIBLE);
-        rightLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BaseActivity.this, "right layout button click", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        actionBar.setLayoutParams(params);
-        return actionBar;
+    public BaseToolbar getBaseToolbar() {
+        if (null == mBaseToolbar) {
+            mBaseToolbar = new BaseToolbar(this);
+        }
+        return mBaseToolbar;
     }
 
     /**
@@ -105,7 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getContentViewId());
 
         if (showToolbar()) {
-            View mToolbar = getToolbar();
+            View mToolbar = getBaseToolbar().getToolbar();
             getSupportActionBar().show();
             getSupportActionBar().setBackgroundDrawable(null);
             // 显示自定义视图

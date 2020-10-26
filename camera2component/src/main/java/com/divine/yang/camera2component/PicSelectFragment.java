@@ -41,17 +41,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 /**
  * Author: Divine
@@ -93,7 +87,7 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     protected void initView(View view) {
-        mPicSelectConfig = ((PicSelectActivity) getActivity()).getConfig();
+        mPicSelectConfig = (PicSelectConfig) getArguments().getSerializable("config");
         mPicSelectListener = ((PicSelectActivity) getActivity());
         if (mPicSelectConfig == null) {
             Log.e("ImgSelFragment", "config 参数不能为空");

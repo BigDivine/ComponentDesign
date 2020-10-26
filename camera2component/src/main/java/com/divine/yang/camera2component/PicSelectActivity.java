@@ -7,16 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.divine.yang.basecomponent.base.BaseActivity;
+import com.divine.yang.basecomponent.base.BaseToolbar;
+import com.divine.yang.basecomponent.base.ToolbarClickListener;
 import com.divine.yang.basecomponent.getpermission.PermissionList;
 import com.divine.yang.camera2component.imageselect.FileUtils;
 import com.divine.yang.camera2component.imageselect.PicSelectConfig;
@@ -34,21 +29,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
  * CreateDate: 2020/10/20
  * Describe:
  */
-public class PicSelectActivity extends BaseActivity implements View.OnClickListener, PicSelectListener {
+public class PicSelectActivity extends BaseActivity implements PicSelectListener {
 
     private static final int IMAGE_CROP_CODE = 1;
     private String mCropImagePath;
 
     private ConstraintLayout mPicSelectHeaderLayout;
-    private TextView mPicSelectHeaderTitle;
-    private TextView mPicSelectHeaderConfirm;
-    private ImageButton mPicSelectHeaderBack;
 
     private PicSelectConfig mPicSelectConfig;
     private PicSelectFragment mPicSelectFragment;
     private ArrayList<String> mPicSelectImagesResult = new ArrayList<>();
-
-    private static PicSelectCallback mPicSelectCallback;
 
     @Override
     public int getContentViewId() {
@@ -60,51 +50,43 @@ public class PicSelectActivity extends BaseActivity implements View.OnClickListe
         return true;
     }
 
-    public View getToolbar() {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-        View actionBar = LayoutInflater.from(this).inflate(R.layout.action_bar_layout, null, false);
-        mPicSelectHeaderLayout = actionBar.findViewById(R.id.action_bar_layout);
-
-        LinearLayout leftLayout = actionBar.findViewById(R.id.action_bar_left);
-        leftLayout.setVisibility(View.VISIBLE);
-        mPicSelectHeaderBack = leftLayout.findViewById(R.id.action_bar_back);
-        mPicSelectHeaderBack.setOnClickListener(this);
-
-        LinearLayout centerLayout = actionBar.findViewById(R.id.action_bar_center);
-        centerLayout.setVisibility(View.VISIBLE);
-        mPicSelectHeaderTitle = centerLayout.findViewById(R.id.action_bar_title);
-        mPicSelectHeaderTitle.setText("这是标题");
-
-        LinearLayout  rightLayout = actionBar.findViewById(R.id.action_bar_right);
-        rightLayout.setVisibility(View.VISIBLE);
-
-         mPicSelectHeaderConfirm = new TextView(this);
-        mPicSelectHeaderConfirm.setText("确定");
-        rightLayout.addView(mPicSelectHeaderConfirm);
-
-        actionBar.setLayoutParams(params);
-
-        return actionBar;
-    }
-
+    private BaseToolbar mBaseToolbar;
 
     @Override
     public void initView() {
         mPicSelectConfig = (PicSelectConfig) getIntent().getSerializableExtra("config");
         mPicSelectFragment = PicSelectFragment.instance();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("config", mPicSelectConfig);
+        mPicSelectFragment.setArguments(bundle);
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.pic_select_images_frame, mPicSelectFragment, null)
                 .commit();
-View toolbar=getToolbar();
 
-        //        mPicSelectHeaderLayout = findViewById(R.id.pic_select_header_layout);
-        //        mPicSelectHeaderTitle = findViewById(R.id.pic_select_header_title);
-        //        mPicSelectHeaderConfirm = findViewById(R.id.pic_select_header_confirm);
-        //        mPicSelectHeaderBack = findViewById(R.id.pic_select_header_back);
-        //        mPicSelectHeaderConfirm.setOnClickListener(this);
-        //        mPicSelectHeaderBack.setOnClickListener(this);
+        mBaseToolbar = getBaseToolbar();
+        mBaseToolbar.setToolbarClickListener(new ToolbarClickListener() {
+            @Override
+            public void leftClick() {
+                onBackPressed();
+
+            }
+
+            @Override
+            public void centerClick() {
+
+            }
+
+            @Override
+            public void rightClick() {
+                if (PicSelectStaticVariable.mPicSelectImageList != null && !PicSelectStaticVariable.mPicSelectImageList.isEmpty()) {
+                    exitPicSelectActivity();
+                } else {
+                    Toast.makeText(PicSelectActivity.this, "最少选择一张图片", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mPicSelectHeaderLayout = mBaseToolbar.getHeaderContainLayout();
 
         if (mPicSelectConfig != null) {
             initConfig();
@@ -119,21 +101,21 @@ View toolbar=getToolbar();
      */
     private void initConfig() {
         if (mPicSelectConfig.backResId != -1) {
-            mPicSelectHeaderBack.setImageResource(mPicSelectConfig.backResId);
+            mBaseToolbar.setLeftDrawable(mPicSelectConfig.backResId);
         }
         mPicSelectHeaderLayout.setBackgroundColor(mPicSelectConfig.titleBgColor);
-        mPicSelectHeaderTitle.setTextColor(mPicSelectConfig.titleColor);
-        mPicSelectHeaderTitle.setText(mPicSelectConfig.title);
-        mPicSelectHeaderConfirm.setBackgroundColor(mPicSelectConfig.btnBgColor);
-        mPicSelectHeaderConfirm.setTextColor(mPicSelectConfig.btnTextColor);
+        mBaseToolbar.setTitle(mPicSelectConfig.title);
+        mBaseToolbar.setTitleColor(mPicSelectConfig.titleColor);
+        mBaseToolbar.setRightBgColor(mPicSelectConfig.btnBgColor);
+        mBaseToolbar.setRightTextColor(mPicSelectConfig.btnTextColor);
         if (mPicSelectConfig.multiSelect) {
             if (!mPicSelectConfig.rememberSelected) {
                 PicSelectStaticVariable.mPicSelectImageList.clear();
             }
-            mPicSelectHeaderConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
+            mBaseToolbar.setRightText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
         } else {
             PicSelectStaticVariable.mPicSelectImageList.clear();
-            mPicSelectHeaderConfirm.setVisibility(View.GONE);
+            mBaseToolbar.setRightVisible(false);
         }
     }
 
@@ -148,20 +130,6 @@ View toolbar=getToolbar();
     }
 
     @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == mPicSelectHeaderConfirm.getId()) {
-            if (PicSelectStaticVariable.mPicSelectImageList != null && !PicSelectStaticVariable.mPicSelectImageList.isEmpty()) {
-                exitPicSelectActivity();
-            } else {
-                Toast.makeText(this, "最少选择一张图片", Toast.LENGTH_SHORT).show();
-            }
-        } else if (id == mPicSelectHeaderBack.getId()) {
-            onBackPressed();
-        }
-    }
-
-    @Override
     public void onSingleImageSelected(String path) {
         if (mPicSelectConfig.needCrop) {
             cropPicSelectImage(path);
@@ -173,12 +141,12 @@ View toolbar=getToolbar();
 
     @Override
     public void onImageSelected(String path) {
-        mPicSelectHeaderConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
+        mBaseToolbar.setRightText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
     }
 
     @Override
     public void onImageUnselected(String path) {
-        mPicSelectHeaderConfirm.setText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
+        mBaseToolbar.setRightText(String.format("%1$s(%2$d/%3$d)", mPicSelectConfig.btnText, PicSelectStaticVariable.mPicSelectImageList.size(), mPicSelectConfig.maxNum));
     }
 
     @Override
@@ -197,9 +165,9 @@ View toolbar=getToolbar();
     @Override
     public void onPreviewChanged(int select, int sum, boolean visible) {
         if (visible) {
-            mPicSelectHeaderTitle.setText(select + "/" + sum);
+            mBaseToolbar.setTitle(select + "/" + sum);
         } else {
-            mPicSelectHeaderTitle.setText(mPicSelectConfig.title);
+            mBaseToolbar.setTitle(mPicSelectConfig.title);
         }
     }
 
@@ -284,20 +252,16 @@ View toolbar=getToolbar();
     }
 
     public void exitPicSelectActivity() {
-        finish();
         mPicSelectImagesResult.clear();
         mPicSelectImagesResult.addAll(PicSelectStaticVariable.mPicSelectImageList);
-        mPicSelectCallback.getImageList(mPicSelectImagesResult);
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("select_pics", mPicSelectImagesResult);
+        intent.putExtra("select_pics_bundle", bundle);
+        setResult(RESULT_OK, intent);
         if (!mPicSelectConfig.multiSelect) {
             PicSelectStaticVariable.mPicSelectImageList.clear();
         }
-    }
-
-    public static void setPicSelectCallback(PicSelectCallback mPicSelectCallback) {
-        PicSelectActivity.mPicSelectCallback = mPicSelectCallback;
-    }
-
-    public PicSelectConfig getConfig() {
-        return mPicSelectConfig;
+        finish();
     }
 }

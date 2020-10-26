@@ -8,26 +8,69 @@
 
     <LinearLayout
         android:id="@+id/action_bar_left"
-        android:layout_width="50dp"
+        android:layout_width="70dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/action_bar_center"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/action_bar_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:paddingLeft="10dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:src="@mipmap/icon_toolbar_back_white" />
+
+        <TextView
+            android:id="@+id/action_bar_back_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="返回"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/action_bar_right"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/action_bar_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:paddingTop="20dp"
             android:paddingRight="10dp"
-            android:background="@android:color/transparent"
             android:paddingBottom="20dp"
-            android:src="@mipmap/icon_toolbar_back_white" />
+            android:src="@mipmap/icon_toolbar_more_line"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/action_bar_menu_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginBottom="@dimen/dp_12"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <LinearLayout
@@ -39,8 +82,8 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@id/action_bar_left"
-        app:layout_constraintRight_toLeftOf="@id/action_bar_right"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -54,26 +97,5 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/action_bar_right"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/action_bar_center"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <!--        <ImageView-->
-        <!--            android:id="@+id/action_bar_menu"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:paddingLeft="10dp"-->
-        <!--            android:paddingTop="20dp"-->
-        <!--            android:paddingRight="10dp"-->
-        <!--            android:paddingBottom="20dp"-->
-        <!--            android:src="@mipmap/icon_toolbar_more_line" />-->
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
