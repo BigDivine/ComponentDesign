@@ -2,13 +2,16 @@ package com.divine.yang.camera2component.imageselect;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.divine.yang.camera2component.R;
 import com.divine.yang.camera2component.imageselect.interfaces.OnFolderChangeListener;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -36,7 +39,7 @@ public class PicSelectFragmentPopRvAdapter extends RecyclerView.Adapter<PicSelec
     @NonNull
     @Override
     public PicSelectFragmentPopRvViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(mContext).inflate(R.layout.adapter_pic_select_fragment_pop_rv_item, parent);
+        View rootView = LayoutInflater.from(mContext).inflate(R.layout.adapter_pic_select_fragment_pop_rv_item, parent,false);
         PicSelectFragmentPopRvViewHolder mPicSelectFragmentPopRvViewHolder = new PicSelectFragmentPopRvViewHolder(rootView);
         return mPicSelectFragmentPopRvViewHolder;
     }
@@ -48,13 +51,13 @@ public class PicSelectFragmentPopRvAdapter extends RecyclerView.Adapter<PicSelec
             holder.mAdapterPicSelectFragmentPopRvItemTitle.setText("所有图片");
             holder.mAdapterPicSelectFragmentPopRvItemNum.setText("共" + getTotalImageSize() + "张");
             if (data.size() > 0) {
-                holder.mAdapterPicSelectFragmentPopRvItemImg.setImageBitmap(BitmapFactory.decodeFile(itemData.cover.path));
+                Glide.with(mContext).load(Uri.fromFile(new File(itemData.cover.path))).into(  holder.mAdapterPicSelectFragmentPopRvItemImg);
             }
         } else {
             holder.mAdapterPicSelectFragmentPopRvItemTitle.setText(itemData.name);
             holder.mAdapterPicSelectFragmentPopRvItemNum.setText("共" + itemData.images.size() + "张");
             if (data.size() > 0) {
-                holder.mAdapterPicSelectFragmentPopRvItemImg.setImageBitmap(BitmapFactory.decodeFile(itemData.cover.path));
+                Glide.with(mContext).load(Uri.fromFile(new File(itemData.cover.path))).into(  holder.mAdapterPicSelectFragmentPopRvItemImg);
             }
         }
 

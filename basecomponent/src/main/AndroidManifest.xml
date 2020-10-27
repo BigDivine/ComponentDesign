@@ -5,10 +5,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application>
-        <activity
-            android:name=".base.BaseFragmentActivity"
-            android:label="@string/title_activity_base_fragment"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".BaseDemoActivity" />
     </application>
 

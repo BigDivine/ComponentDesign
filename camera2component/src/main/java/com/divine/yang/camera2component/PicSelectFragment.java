@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -236,15 +238,17 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void createPopupFolderList(int width, int height) {
-        View rootView = LayoutInflater.from(mContext).inflate(R.layout.common_layout_with_rv, null);
-        rootView.setLayoutParams(new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
+        View rootView = LayoutInflater.from(mContext).inflate(R.layout.common_layout_with_rv, null,false);
+        rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         RecyclerView commonRecyclerView = rootView.findViewById(R.id.common_layout_rv);
         popupWindow = new PopupWindow(getActivity());
-        popupWindow.setWidth(width);
-        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setContentView(rootView);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#aaaaaa")));
+          popupWindow.setContentView(rootView);
+        //点击外部弹出不消失
+        popupWindow.setFocusable(false);
+        popupWindow.setOutsideTouchable(false);
 
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#aaaaaa")));
+        commonRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         commonRecyclerView.setAdapter(mPicSelectFragmentPopRvAdapter);
 
         mPicSelectFragmentPopRvAdapter.setOnFolderChangeListener(new OnFolderChangeListener() {
@@ -292,12 +296,13 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
                 popupWindow.dismiss();
             } else {
                 //                popupWindow.show();
-                popupWindow.showAsDropDown(mRlPicSelectFragmentBottomLayout);
+                popupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+
                 //                if (popupWindow.getListView() != null) {
                 //                    popupWindow.getListView().setDivider(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.bottom_bg)));
                 //                }
-                int index = mPicSelectFragmentPopRvAdapter.getSelectIndex();
-                index = index == 0 ? index : index - 1;
+//                int index = mPicSelectFragmentPopRvAdapter.getSelectIndex();
+//                index = index == 0 ? index : index - 1;
                 //                popupWindow.getListView().setSelection(index);
 
                 //                popupWindow.getListView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

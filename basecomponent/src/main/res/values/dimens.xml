@@ -28,4 +28,5 @@
     <dimen name="sp_9">9sp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
 </resources>

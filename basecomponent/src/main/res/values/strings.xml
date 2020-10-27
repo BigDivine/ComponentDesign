@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">BaseComponent</string>
+    <string name="hello_first_fragment">hello first fragment!</string>
+    <string name="title_home">home</string>
+    <string name="title_notifications">notifications</string>
+    <string name="title_applications">applications</string>
+    <string name="title_user_info">userInfo</string>
+    <string name="first_fragment_label">first_fragment</string>
+    <string name="second_fragment_label">second_fragment</string>
 </resources>
