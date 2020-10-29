@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.divine.yang.basecomponent.base.BaseActivity;
 import com.divine.yang.basecomponent.base.BaseToolbar;
+import com.divine.yang.basecomponent.base.ToolbarClickListener;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements ToolbarClickListener{
     private final int GET_PIC_REQUEST_CODE = 1;
     private ArrayList<String> imgData;
     private RecyclerView imgResult;
@@ -34,6 +35,9 @@ public class MainActivity extends BaseActivity {
     public void initView() {
         BaseToolbar baseToolbar = getBaseToolbar();
         baseToolbar.setTitle("选择图片demo");
+        baseToolbar.setRightVisible(false);
+        baseToolbar.setLeftText("退出");
+        baseToolbar.setToolbarClickListener(this);
 
         Button btn = findViewById(R.id.camera2_button);
         imgResult = findViewById(R.id.camera2_rv);
@@ -73,5 +77,20 @@ public class MainActivity extends BaseActivity {
     @Override
     public String[] requestPermissions() {
         return new String[0];
+    }
+
+    @Override
+    public void leftClick() {
+        finish();
+    }
+
+    @Override
+    public void centerClick() {
+
+    }
+
+    @Override
+    public void rightClick() {
+
     }
 }

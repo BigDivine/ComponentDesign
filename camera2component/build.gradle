@@ -78,8 +78,7 @@ dependencies {
     implementation googleAndroid.Material
     implementation androidx.NavigationUI
     implementation androidx.NavigationFragment
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+
     annotationProcessor wmRouter.RouterCompiler
     annotationProcessor glide.GlideCompiler
 }

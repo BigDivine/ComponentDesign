@@ -33,8 +33,7 @@ public class DecodeRequestBodyConverter<T> implements Converter<T, RequestBody> 
     public RequestBody convert(T value) throws IOException {
         Buffer buffer = new Buffer();
         Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
-        JsonWriter jsonWriter = gson.newJsonWriter(writer);//出现问题后让身份证三方（taicloudlib-1.4.5）更新Gson版本，
-        // 或者自己解决引入三方Gson冲突的问题，解决后改成：JsonWriter jsonWriter = gson.newJsonWriter(writer)
+        JsonWriter jsonWriter = gson.newJsonWriter(writer);
         adapter.write(jsonWriter, value);
         jsonWriter.flush();
         return RetrofitUtils.ByteString2RequestBody(buffer.readByteString());

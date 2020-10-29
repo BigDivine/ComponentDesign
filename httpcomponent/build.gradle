@@ -75,13 +75,21 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":basecomponent")
-
-    implementation retrofit2.Retrofit
-    implementation retrofit2.ConverterGson
-    implementation retrofit2.ConverterScalars
-    implementation retrofit2.AdapterRxjava2
-    implementation rxjava2.Rxjava
-    implementation rxjava2.Rxandroid
+    if (isHttpRunAlone.toBoolean()) {
+        implementation retrofit2.Retrofit
+        implementation retrofit2.ConverterGson
+        implementation retrofit2.ConverterScalars
+        implementation retrofit2.AdapterRxjava2
+        implementation rxjava2.Rxjava
+        implementation rxjava2.Rxandroid
+    }else{
+        api retrofit2.Retrofit
+        api retrofit2.ConverterGson
+        api retrofit2.ConverterScalars
+        api retrofit2.AdapterRxjava2
+        api rxjava2.Rxjava
+        api rxjava2.Rxandroid
+    }
 
     annotationProcessor wmRouter.RouterCompiler
     annotationProcessor glide.GlideCompiler
