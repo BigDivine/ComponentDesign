@@ -2,8 +2,11 @@ package com.divine.yang.httpcomponent.retrofit2;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.divine.yang.httpcomponent.R;
+
+import org.w3c.dom.Text;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Observable;
@@ -15,12 +18,12 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class Retrofit2DemoActivity extends AppCompatActivity {
-
+private TextView tvResponse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrofit2_demo);
-
+        tvResponse=findViewById(R.id.http_response);
         Retrofit2Service retrofit2Service = Retrofit2Helper.getInstance().getService();
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), "{\"id\":\"33894312\"}");
@@ -39,11 +42,13 @@ public class Retrofit2DemoActivity extends AppCompatActivity {
                     @Override
                     public void onNext(String s) {
                         Log.e("del",s);
+                        tvResponse.setText(s);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e("del",e.toString());
+                        tvResponse.setText(e.toString());
 
                     }
 
