@@ -1,5 +1,7 @@
 package com.divine.yang.httpcomponent.lib;
 
+import com.divine.yang.httpcomponent.retrofit2.CustomException;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
@@ -38,7 +40,7 @@ public class UploadResponseTransformer {
 
         @Override
         public ObservableSource<? extends T> apply(Throwable throwable) throws Exception {
-            return Observable.error(CustomException.handleException(throwable));
+            return Observable.error(CustomException.handleExceptions(throwable));
         }
     }
 

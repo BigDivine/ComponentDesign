@@ -1,5 +1,6 @@
 package com.divine.yang.httpcomponent.lib;
 
+import com.divine.yang.httpcomponent.retrofit2.GeneralException;
 import com.google.gson.TypeAdapter;
 
 import org.json.JSONException;
@@ -42,7 +43,7 @@ public class DecodeResponseBodyConverter<T> implements Converter<ResponseBody, T
                 if (code == 0) {
                     return adapter.fromJson(object.toString());
                 } else {
-                    throw new ApiException(code, message);
+                    throw new GeneralException(code, message);
                 }
             } else {
                 return adapter.fromJson(object.toString());

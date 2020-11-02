@@ -1,5 +1,4 @@
-package com.divine.yang.httpcomponent.lib;
-
+package com.divine.yang.httpcomponent.retrofit2;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,31 +10,25 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Zaifeng on 2018/2/28.
- * 线程切换
+ * Author: Divine
+ * CreateDate: 2020/11/2
+ * Describe:
  */
-public class SchedulerProvider {
+public class RxJava2SchedulerTransformer {
 
     @Nullable
-    private static SchedulerProvider INSTANCE;
+    private static RxJava2SchedulerTransformer INSTANCE;
 
     // Prevent direct instantiation.
-    private SchedulerProvider() {
+    private RxJava2SchedulerTransformer() {
     }
 
-    public static synchronized SchedulerProvider getInstance() {
+    public static synchronized RxJava2SchedulerTransformer getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new SchedulerProvider();
+            INSTANCE = new RxJava2SchedulerTransformer();
         }
         return INSTANCE;
     }
-
-
-    @NonNull
-    public Scheduler computation() {
-        return Schedulers.computation();
-    }
-
 
     @NonNull
     public Scheduler io() {

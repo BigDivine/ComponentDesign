@@ -1,5 +1,7 @@
 package com.divine.yang.httpcomponent.lib;
 
+import com.divine.yang.httpcomponent.retrofit2.Retrofit2Service;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -16,7 +18,7 @@ public class RetrofitUploadFileHelper {
     private static Retrofit mRetroFit;
     private static RetrofitUploadFileHelper mRetrofitHelper;
 
-    private RetrofitService retrofitService;
+    private Retrofit2Service retrofitService;
 
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(30000, TimeUnit.MILLISECONDS)
@@ -57,11 +59,11 @@ public class RetrofitUploadFileHelper {
                 .build();
     }
 
-    public RetrofitService getService() {
+    public Retrofit2Service getService() {
         if (null == retrofitService) {
-            synchronized (RetrofitService.class) {
+            synchronized (Retrofit2Service.class) {
                 if (null == retrofitService) {
-                    retrofitService = mRetroFit.create(RetrofitService.class);
+                    retrofitService = mRetroFit.create(Retrofit2Service.class);
                 }
             }
         }
