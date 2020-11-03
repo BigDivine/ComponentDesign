@@ -18,24 +18,24 @@ import retrofit2.Converter;
  * <p>
  * date: 2018/12/18
  */
-public class DecodeRequestBodyConverter<T> implements Converter<T, RequestBody> {
-    private static final Charset UTF_8 = Charset.forName("UTF-8");
-
-    private final Gson gson;
-    private final TypeAdapter<T> adapter;
-
-    DecodeRequestBodyConverter(Gson gson, TypeAdapter<T> adapter) {
-        this.gson = gson;
-        this.adapter = adapter;
-    }
-
-    @Override
-    public RequestBody convert(T value) throws IOException {
-        Buffer buffer = new Buffer();
-        Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
-        JsonWriter jsonWriter = gson.newJsonWriter(writer);
-        adapter.write(jsonWriter, value);
-        jsonWriter.flush();
-        return RetrofitUtils.ByteString2RequestBody(buffer.readByteString());
-    }
-}
+//public class DecodeRequestBodyConverter<T> implements Converter<T, RequestBody> {
+//    private static final Charset UTF_8 = Charset.forName("UTF-8");
+//
+//    private final Gson gson;
+//    private final TypeAdapter<T> adapter;
+//
+//    DecodeRequestBodyConverter(Gson gson, TypeAdapter<T> adapter) {
+//        this.gson = gson;
+//        this.adapter = adapter;
+//    }
+//
+//    @Override
+//    public RequestBody convert(T value) throws IOException {
+//        Buffer buffer = new Buffer();
+//        Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
+//        JsonWriter jsonWriter = gson.newJsonWriter(writer);
+//        adapter.write(jsonWriter, value);
+//        jsonWriter.flush();
+//        return RetrofitUtils.ByteString2RequestBody(buffer.readByteString());
+//    }
+//}

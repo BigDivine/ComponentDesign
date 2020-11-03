@@ -1,3 +1,4 @@
+include ':webviewcomponent'
 include ':widgetcomponent'
 include ':basecomponent'
 include ':camera2component'

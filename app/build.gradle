@@ -88,6 +88,10 @@ dependencies {
     if (!isWidgetRunAlone.toBoolean()) {
         implementation project(":widgetcomponent")
     }
+    //    #自定义控件模块是否独立运行
+    if (!isWebViewRunAlone.toBoolean()) {
+        implementation project(":webviewcomponent")
+    }
     annotationProcessor wmRouter.RouterCompiler
     annotationProcessor glide.GlideCompiler
 }

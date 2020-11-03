@@ -11,4 +11,10 @@
     <color name="back_black">#323232</color>
     <color name="back_blue">#276EEB</color>
     <color name="bottom_bg">#aaaaaa</color>
+    <color name="red_text">#FB514B</color>
+    <color name="back_slide">#E5E5E5</color>
+    <color name="backgroundColor">#0CA6F0</color>
+    <color name="EditTextLineColor">#BCBBC1</color>
+    <color name="gray_text">#838B8F</color>
+
 </resources>

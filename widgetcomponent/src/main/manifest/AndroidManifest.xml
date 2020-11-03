@@ -4,6 +4,8 @@
 
     <application>
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".demo.SignatureViewDemoActivity"></activity>
+
     </application>
 
 </manifest>
