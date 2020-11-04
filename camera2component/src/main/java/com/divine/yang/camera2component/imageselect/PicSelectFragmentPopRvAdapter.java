@@ -24,13 +24,13 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class PicSelectFragmentPopRvAdapter extends RecyclerView.Adapter<PicSelectFragmentPopRvViewHolder> {
     private Context mContext;
-    private List<Folder> data;
+    private List<Camera2Folder> data;
     private PicSelectConfig config;
     private int selected = 0;
 
     private OnFolderChangeListener listener;
 
-    public PicSelectFragmentPopRvAdapter(Context mContext, List<Folder> data, PicSelectConfig config) {
+    public PicSelectFragmentPopRvAdapter(Context mContext, List<Camera2Folder> data, PicSelectConfig config) {
         this.mContext = mContext;
         this.data = data;
         this.config = config;
@@ -46,7 +46,7 @@ public class PicSelectFragmentPopRvAdapter extends RecyclerView.Adapter<PicSelec
 
     @Override
     public void onBindViewHolder(@NonNull PicSelectFragmentPopRvViewHolder holder, int position) {
-        Folder itemData = this.data.get(position);
+        Camera2Folder itemData = this.data.get(position);
         if (position == 0) {
             holder.mAdapterPicSelectFragmentPopRvItemTitle.setText("所有图片");
             holder.mAdapterPicSelectFragmentPopRvItemNum.setText("共" + getTotalImageSize() + "张");
@@ -82,7 +82,7 @@ public class PicSelectFragmentPopRvAdapter extends RecyclerView.Adapter<PicSelec
     }
 
 
-    public void setData(List<Folder> folders) {
+    public void setData(List<Camera2Folder> folders) {
         data.clear();
         if (folders != null && folders.size() > 0) {
             data.addAll(folders);
@@ -93,7 +93,7 @@ public class PicSelectFragmentPopRvAdapter extends RecyclerView.Adapter<PicSelec
     private int getTotalImageSize() {
         int result = 0;
         if (data != null && data.size() > 0) {
-            for (Folder folder : data) {
+            for (Camera2Folder folder : data) {
                 result += folder.images.size();
             }
         }

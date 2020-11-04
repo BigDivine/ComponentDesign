@@ -1,4 +1,46 @@
 ext {
+    appVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleBaseVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleCamera2Versions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleCommonVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleHttpVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleImageEditVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleLoginVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleSqliteVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleWebViewVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+    moudleWidgetVersions = [
+            versionCode: 1,
+            versionName: '1.0.0'
+    ]
+
+
     versions = [
             compileSdkVersion         : 29,
             buildToolsVersion         : "29.0.3",
@@ -51,8 +93,8 @@ ext {
             Fresco: "com.facebook.fresco:fresco:${versions.FacebookFrescoVersion}",
     ]
     glide = [
-            Glide: "com.github.bumptech.glide:glide:${versions.GlideVersion}",
-            GlideCompiler:"com.github.bumptech.glide:compiler:${versions.GlideVersion}"
+            Glide        : "com.github.bumptech.glide:glide:${versions.GlideVersion}",
+            GlideCompiler: "com.github.bumptech.glide:compiler:${versions.GlideVersion}"
     ]
     retrofit2 = [
             Retrofit        : "com.squareup.retrofit2:retrofit:${versions.Retrofit2Version}",

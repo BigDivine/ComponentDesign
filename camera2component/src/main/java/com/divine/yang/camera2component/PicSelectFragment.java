@@ -23,11 +23,10 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.divine.yang.basecomponent.base.BaseFragment;
-import com.divine.yang.camera2component.imageselect.CustomViewPager;
-import com.divine.yang.camera2component.imageselect.DividerGridItemDecoration;
-import com.divine.yang.camera2component.imageselect.FileUtils;
-import com.divine.yang.camera2component.imageselect.Folder;
-import com.divine.yang.camera2component.imageselect.Image;
+import com.divine.yang.widgetcomponent.widget.DividerGridItemDecoration;
+import com.divine.yang.commonutils.FileUtils;
+import com.divine.yang.camera2component.imageselect.Camera2Folder;
+import com.divine.yang.camera2component.imageselect.Camera2Image;
 import com.divine.yang.camera2component.imageselect.PicSelectConfig;
 import com.divine.yang.camera2component.imageselect.PicSelectFragmentPopRvAdapter;
 import com.divine.yang.camera2component.imageselect.PicSelectFragmentRvAdapter;
@@ -36,6 +35,7 @@ import com.divine.yang.camera2component.imageselect.PicSelectStaticVariable;
 import com.divine.yang.camera2component.imageselect.interfaces.OnFolderChangeListener;
 import com.divine.yang.camera2component.imageselect.interfaces.OnPicSelectFragmentRvItemClickListener;
 import com.divine.yang.camera2component.imageselect.interfaces.PicSelectListener;
+import com.divine.yang.widgetcomponent.widget.CustomViewPager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,8 +64,8 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
     private PicSelectFragmentVpAdapter mPicSelectFragmentVpAdapter;
     private PicSelectConfig mPicSelectConfig;
     private PicSelectListener mPicSelectListener;
-    private List<Folder> mFolderList = new ArrayList<>();
-    private List<Image> mImageList = new ArrayList<>();
+    private List<Camera2Folder> mFolderList = new ArrayList<>();
+    private List<Camera2Image> mImageList = new ArrayList<>();
 
     private PopupWindow popupWindow;
     private PicSelectFragmentPopRvAdapter mPicSelectFragmentPopRvAdapter;
@@ -114,7 +114,7 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
         mPicSelectFragmentRvAdapter.setMultiSelect(mPicSelectConfig.multiSelect);
         mPicSelectFragmentRvAdapter.setListener(new OnPicSelectFragmentRvItemClickListener() {
             @Override
-            public void onItemClick(View view, int position, Image item) {
+            public void onItemClick(View view, int position, Camera2Image item) {
                 if (mPicSelectConfig.needCamera && position == 0) {
                     showCameraAction();
                 } else {
@@ -123,12 +123,12 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
                         mCvpPicSelectFragmentPicPreview.setAdapter(mPicSelectFragmentVpAdapter);
                         mPicSelectFragmentVpAdapter.setListener(new OnPicSelectFragmentRvItemClickListener() {
                             @Override
-                            public void onItemClick(View view, int position, Image item) {
+                            public void onItemClick(View view, int position, Camera2Image item) {
                                 hidePreview();
                             }
 
                             @Override
-                            public int onItemCheckClick(View view, int position, Image item) {
+                            public int onItemCheckClick(View view, int position, Camera2Image item) {
                                 return checkedImage(position, item);
                             }
                         });
@@ -148,7 +148,7 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
             }
 
             @Override
-            public int onItemCheckClick(View view, int position, Image item) {
+            public int onItemCheckClick(View view, int position, Camera2Image item) {
                 return checkedImage(position, item);
             }
         });
@@ -168,19 +168,19 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
                        null,
                        null,
                        MediaStore.Images.Media.DATE_ADDED + " DESC");
-        ArrayList<Image> tempImageList = new ArrayList<>();
+        ArrayList<Camera2Image> tempImageList = new ArrayList<>();
         while (cursor.moveToNext()) {
             String path = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
             String name = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
-            Image image = new Image(path, name);
+            Camera2Image image = new Camera2Image(path, name);
             tempImageList.add(image);
             File imageFile = new File(path);
             File folderFile = imageFile.getParentFile();
             if (folderFile == null || !imageFile.exists() || imageFile.length() < 10) {
                 continue;
             }
-            Folder parent = null;
-            for (Folder folder : mFolderList) {
+            Camera2Folder parent = null;
+            for (Camera2Folder folder : mFolderList) {
                 if (TextUtils.equals(folder.path, folderFile.getAbsolutePath())) {
                     parent = folder;
                 }
@@ -188,11 +188,11 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
             if (parent != null) {
                 parent.images.add(image);
             } else {
-                parent = new Folder();
+                parent = new Camera2Folder();
                 parent.name = folderFile.getName();
                 parent.path = folderFile.getAbsolutePath();
                 parent.cover = image;
-                List<Image> imageList = new ArrayList<>();
+                List<Camera2Image> imageList = new ArrayList<>();
                 imageList.add(image);
                 parent.images = imageList;
                 mFolderList.add(parent);
@@ -200,7 +200,7 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
         }
         mImageList.clear();
         if (mPicSelectConfig.needCamera) {
-            mImageList.add(new Image());
+            mImageList.add(new Camera2Image());
         }
         mImageList.addAll(tempImageList);
 
@@ -214,7 +214,7 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
         return R.layout.fragment_pic_select_layout;
     }
 
-    private int checkedImage(int position, Image image) {
+    private int checkedImage(int position, Camera2Image image) {
         if (image != null) {
             if (PicSelectStaticVariable.mPicSelectImageList.contains(image.path)) {
                 PicSelectStaticVariable.mPicSelectImageList.remove(image.path);
@@ -253,14 +253,14 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
 
         mPicSelectFragmentPopRvAdapter.setOnFolderChangeListener(new OnFolderChangeListener() {
             @Override
-            public void onChange(int position, Folder folder) {
+            public void onChange(int position, Camera2Folder folder) {
                 popupWindow.dismiss();
                 if (position == 0) {
                     mBtnPicSelectFragmentBottomAlbumSelect.setText(mPicSelectConfig.allImagesText);
                 } else {
                     mImageList.clear();
                     if (mPicSelectConfig.needCamera)
-                        mImageList.add(new Image());
+                        mImageList.add(new Camera2Image());
                     mImageList.addAll(folder.images);
                     mPicSelectFragmentRvAdapter.notifyDataSetChanged();
 

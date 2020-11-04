@@ -2,7 +2,7 @@ package com.divine.yang.camera2component.imageselect.interfaces;
 
 import android.view.View;
 
-import com.divine.yang.camera2component.imageselect.Image;
+import com.divine.yang.camera2component.imageselect.Camera2Image;
 
 /**
  * Author: Divine
@@ -10,6 +10,6 @@ import com.divine.yang.camera2component.imageselect.Image;
  * Describe:
  */
 public interface OnPicSelectFragmentRvItemClickListener {
-    void onItemClick(View view,int position, Image item );
-    int onItemCheckClick(View view,int position, Image item );
+    void onItemClick(View view,int position, Camera2Image item );
+    int onItemCheckClick(View view,int position, Camera2Image item );
 }

@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="5">
 
-        <com.divine.yang.camera2component.AutoFixTextureView
+        <com.divine.yang.widgetcomponent.widget.AutoFixTextureView
             android:id="@+id/camera2_camera_texture_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

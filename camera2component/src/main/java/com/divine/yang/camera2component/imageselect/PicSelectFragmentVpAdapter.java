@@ -25,11 +25,11 @@ import androidx.viewpager.widget.PagerAdapter;
  */
 public class PicSelectFragmentVpAdapter extends PagerAdapter {
     private Context mContext;
-    private List<Image> images;
+    private List<Camera2Image> images;
     private PicSelectConfig config;
     private OnPicSelectFragmentRvItemClickListener listener;
 
-    public PicSelectFragmentVpAdapter(Context mContext, List<Image> images, PicSelectConfig config) {
+    public PicSelectFragmentVpAdapter(Context mContext, List<Camera2Image> images, PicSelectConfig config) {
         this.mContext = mContext;
         this.images = images;
         this.config = config;
@@ -43,7 +43,7 @@ public class PicSelectFragmentVpAdapter extends PagerAdapter {
         ImageButton mAdapterPicSelectFragmentVpItemCheck = rootView.findViewById(R.id.adapter_pic_select_fragment_vp_item_check);
         if (config.multiSelect) {
             mAdapterPicSelectFragmentVpItemCheck.setVisibility(View.VISIBLE);
-            final Image image = images.get(config.needCamera ? position + 1 : position);
+            final Camera2Image image = images.get(config.needCamera ? position + 1 : position);
             if (PicSelectStaticVariable.mPicSelectImageList.contains(image.path)) {
                 mAdapterPicSelectFragmentVpItemCheck.setImageResource(R.mipmap.ic_checked);
             } else {

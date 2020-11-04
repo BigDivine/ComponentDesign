@@ -18,8 +18,8 @@ android {
         flavorDimensions "versionCode"
         productFlavors {
             DEFAULT {
-                versionCode 1
-                versionName "1.0.0"
+                versionCode moudleWebViewVersions.versionCode
+                versionName moudleWebViewVersions.versionName
                 manifestPlaceholders = [
                         app_name: "WebView应用",
                         logo    : "@mipmap/ic_launcher",

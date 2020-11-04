@@ -7,12 +7,16 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.divine.yang.basecomponent.base.BaseActivity;
+import com.divine.yang.commonutils.SharedPreferencesUtils;
+import com.divine.yang.widgetcomponent.widget.EditTextWithClean;
+import com.sankuai.waimai.router.annotation.RouterUri;
 
 /**
  * Author: Divine
  * CreateDate: 2020/11/03
  * Describe: 登录模块界面
  */
+@RouterUri(scheme = "login_scheme", host = "login_host", path = "/login_demo_main")
 public class LoginActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "LoginActivity";
@@ -71,13 +75,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.remember_user:
-                isRememberUser = isChecked;
-                break;
-            case R.id.remember_pwd:
-                isRememberPWD = isChecked;
-                break;
+        int viewId = buttonView.getId();
+        if (viewId == R.id.remember_user) {
+            isRememberUser = isChecked;
+        } else if (viewId == R.id.remember_pwd) {
+            isRememberPWD = isChecked;
         }
     }
 }

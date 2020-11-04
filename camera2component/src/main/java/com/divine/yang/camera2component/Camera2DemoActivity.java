@@ -9,7 +9,7 @@ import com.sankuai.waimai.router.annotation.RouterUri;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-@RouterUri(path = "/camera2_demo_main")
+@RouterUri(scheme = "camera2_scheme",host = "camera2_host",path = "/camera2_demo_main")
 public class Camera2DemoActivity extends BaseActivity {
     private String TAG = "D-Camera2DemoActivity";
     private Camera2Fragment mCamera2Fragment;

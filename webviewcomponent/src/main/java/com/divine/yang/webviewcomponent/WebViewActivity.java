@@ -28,6 +28,7 @@ import com.divine.yang.basecomponent.utils.ActivityUtils;
 import com.divine.yang.webviewcomponent.client.WebViewInterface;
 import com.divine.yang.webviewcomponent.constant.NmhkUrls;
 import com.divine.yang.webviewcomponent.util.WebViewUtil;
+import com.sankuai.waimai.router.annotation.RouterUri;
 
 import java.io.File;
 
@@ -41,6 +42,7 @@ import androidx.core.content.FileProvider;
  * @date 2019-06-21
  * @describe webView页
  */
+@RouterUri(scheme = "webview_scheme", host = "webview_host", path = "/webview_demo_main")
 public class WebViewActivity extends BaseActivity implements WebViewInterface, View.OnClickListener, View.OnLongClickListener {
 
     private RelativeLayout container;
@@ -203,14 +205,12 @@ public class WebViewActivity extends BaseActivity implements WebViewInterface, V
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back_btn:
-                this.finish();
-                break;
-            case R.id.to_setting_btn:
-                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                startActivity(intent);
-                break;
+        int viewId = v.getId();
+        if (viewId == R.id.back_btn) {
+            this.finish();
+        } else if (viewId == R.id.to_setting_btn) {
+            Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+            startActivity(intent);
         }
     }
 

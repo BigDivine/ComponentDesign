@@ -13,10 +13,9 @@ import com.divine.yang.basecomponent.base.BaseActivity;
 import com.divine.yang.basecomponent.base.BaseToolbar;
 import com.divine.yang.basecomponent.base.ToolbarClickListener;
 import com.divine.yang.basecomponent.getpermission.PermissionList;
-import com.divine.yang.camera2component.imageselect.FileUtils;
+import com.divine.yang.commonutils.FileUtils;
 import com.divine.yang.camera2component.imageselect.PicSelectConfig;
 import com.divine.yang.camera2component.imageselect.PicSelectStaticVariable;
-import com.divine.yang.camera2component.imageselect.interfaces.PicSelectCallback;
 import com.divine.yang.camera2component.imageselect.interfaces.PicSelectListener;
 
 import java.io.File;

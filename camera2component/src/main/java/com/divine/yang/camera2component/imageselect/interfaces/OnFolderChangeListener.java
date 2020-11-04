@@ -1,6 +1,6 @@
 package com.divine.yang.camera2component.imageselect.interfaces;
 
-import com.divine.yang.camera2component.imageselect.Folder;
+import com.divine.yang.camera2component.imageselect.Camera2Folder;
 
 /**
  * Author: Divine
@@ -9,5 +9,5 @@ import com.divine.yang.camera2component.imageselect.Folder;
  */
 public interface OnFolderChangeListener {
 
-    void onChange(int position, Folder folder);
+    void onChange(int position, Camera2Folder folder);
 }

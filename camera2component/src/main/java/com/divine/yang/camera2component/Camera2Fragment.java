@@ -3,7 +3,6 @@ package com.divine.yang.camera2component;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -45,9 +44,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.divine.yang.basecomponent.base.BaseFragment;
-import com.divine.yang.camera2component.imageselect.FileUtils;
-import com.divine.yang.camera2component.imageselect.ImageUtils;
-import com.divine.yang.camera2component.imageselect.PicSelectConfig;
+import com.divine.yang.widgetcomponent.widget.AutoFixTextureView;
+import com.divine.yang.commonutils.FileUtils;
+ import com.divine.yang.camera2component.imageselect.PicSelectConfig;
+import com.divine.yang.commonutils.ImageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -345,37 +345,32 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     @Override
     public void onClick(View view) {
         int viewId = view.getId();
-        switch (viewId) {
-            case R.id.camera2_camera_header_close:
-                getActivity().finish();
-                break;
-            case R.id.camera2_camera_header_open_flash_lamp:
-                changeFlashState();
-                break;
-            case R.id.camera2_button_album:
-                PicSelectConfig mPicSelectConfig = new PicSelectConfig.Builder()
-                        // 是否记住上次选中记录
-                        .rememberSelected(false)
-                        .needCamera(false)
-                        .multiSelect(isMultiSelect)
-                        // 使用沉浸式状态栏
-                        .statusBarColor(Color.parseColor("#3F51B5"))
-                        .build();
-                Intent intent = new Intent(getContext(), PicSelectActivity.class);
-                intent.putExtra("config", mPicSelectConfig);
-                startActivityForResult(intent, SELECT_PIC_REQUEST_CODE);
-                break;
-            case R.id.camera2_button_take_photo:
-                // 拍照按钮监听
-                takePicture();
-                break;
-            case R.id.camera2_button_submit:
-                ArrayList<String> imageList = new ArrayList<>();
-                for (int i = 0; i < mPicPathList.size(); i++) {
-                    imageList.add(mPicPathList.get(i).get("path"));
-                }
-                setPicResult(imageList);
-                break;
+        if (viewId == R.id.camera2_camera_header_close) {
+            getActivity().finish();
+
+        } else if (viewId == R.id.camera2_camera_header_open_flash_lamp) {
+            changeFlashState();
+        } else if (viewId == R.id.camera2_button_album) {
+            PicSelectConfig mPicSelectConfig = new PicSelectConfig.Builder()
+                    // 是否记住上次选中记录
+                    .rememberSelected(false)
+                    .needCamera(false)
+                    .multiSelect(isMultiSelect)
+                    // 使用沉浸式状态栏
+                    .statusBarColor(Color.parseColor("#3F51B5"))
+                    .build();
+            Intent intent = new Intent(getContext(), PicSelectActivity.class);
+            intent.putExtra("config", mPicSelectConfig);
+            startActivityForResult(intent, SELECT_PIC_REQUEST_CODE);
+        } else if (viewId == R.id.camera2_button_take_photo) {
+            // 拍照按钮监听
+            takePicture();
+        } else if (viewId == R.id.camera2_button_submit) {
+            ArrayList<String> imageList = new ArrayList<>();
+            for (int i = 0; i < mPicPathList.size(); i++) {
+                imageList.add(mPicPathList.get(i).get("path"));
+            }
+            setPicResult(imageList);
         }
     }
 

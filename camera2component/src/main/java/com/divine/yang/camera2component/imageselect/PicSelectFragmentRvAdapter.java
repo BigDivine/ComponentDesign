@@ -24,12 +24,12 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class PicSelectFragmentRvAdapter extends RecyclerView.Adapter<PicSelectFragmentRvViewHolder> {
     private Context mContext;
-    private List<Image> data;
+    private List<Camera2Image> data;
     private PicSelectConfig config;
     private boolean showCamera, multiSelect;
     private OnPicSelectFragmentRvItemClickListener listener;
 
-    public PicSelectFragmentRvAdapter(Context mContext, List<Image> data, PicSelectConfig config) {
+    public PicSelectFragmentRvAdapter(Context mContext, List<Camera2Image> data, PicSelectConfig config) {
         this.mContext = mContext;
         this.data = data;
         this.config = config;
@@ -45,7 +45,7 @@ public class PicSelectFragmentRvAdapter extends RecyclerView.Adapter<PicSelectFr
 
     @Override
     public void onBindViewHolder(@NonNull PicSelectFragmentRvViewHolder holder, int position) {
-        Image itemData = this.data.get(position);
+        Camera2Image itemData = this.data.get(position);
         if (position == 0 && showCamera) {
             holder.mAdapterPicSelectFragmentRvItemImg.setImageResource(R.mipmap.ic_take_photo);
             holder.mAdapterPicSelectFragmentRvItemImg.setOnClickListener(new View.OnClickListener() {

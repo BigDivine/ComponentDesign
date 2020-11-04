@@ -1,6 +1,6 @@
 package com.divine.yang.camera2component.imageselect.interfaces;
 
-import com.divine.yang.camera2component.imageselect.Image;
+import com.divine.yang.camera2component.imageselect.Camera2Image;
 
 /**
  * Author: Divine
@@ -9,8 +9,8 @@ import com.divine.yang.camera2component.imageselect.Image;
  */
 public interface OnItemClickListener {
 
-    int onCheckedClick(int position, Image image);
+    int onCheckedClick(int position, Camera2Image image);
 
-    void onImageClick(int position, Image image);
+    void onImageClick(int position, Camera2Image image);
 }
 

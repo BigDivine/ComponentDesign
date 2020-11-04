@@ -46,7 +46,7 @@
 
     </RelativeLayout>
 
-    <com.divine.yang.camera2component.imageselect.CustomViewPager
+    <com.divine.yang.widgetcomponent.widget.CustomViewPager
         android:id="@+id/pic_select_fragment_pic_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.sankuai.waimai.router.Router;
 import com.sankuai.waimai.router.common.DefaultRootUriHandler;
+import com.sankuai.waimai.router.components.DefaultLogger;
+import com.sankuai.waimai.router.core.Debugger;
 
 /**
  * Author: Divine
@@ -20,5 +22,10 @@ public class MyApplication extends Application {
         DefaultRootUriHandler rootHandler = new DefaultRootUriHandler(context);
         // 初始化
         Router.init(rootHandler);
+
+        Debugger.setLogger(DefaultLogger.INSTANCE);
+        Debugger.setEnableDebug(true);
+        Debugger.setEnableLog(true);
+
     }
 }

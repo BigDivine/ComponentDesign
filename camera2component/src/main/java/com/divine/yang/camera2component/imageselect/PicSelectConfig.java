@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.os.Environment;
 
 
+import com.divine.yang.commonutils.FileUtils;
+
 import java.io.Serializable;
 
 /**

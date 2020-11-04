@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.divine.yang.basecomponent.base.BaseActivity;
 import com.divine.yang.basecomponent.base.BaseToolbar;
 import com.divine.yang.basecomponent.base.ToolbarClickListener;
+import com.sankuai.waimai.router.annotation.RouterUri;
 
 import java.util.ArrayList;
 

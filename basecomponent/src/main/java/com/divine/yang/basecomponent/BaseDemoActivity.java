@@ -18,7 +18,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-@RouterUri(scheme = "base_scheme",host = "base_host",path = "/base_component_main")
+@RouterUri(scheme = "base_scheme",host = "base_host",path = "/base_demo_main")
 public class BaseDemoActivity extends BaseActivity {
 
     @Override

@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.divine.yang.httpcomponent.retrofit2.Retrofit2DemoActivity;
+import com.sankuai.waimai.router.annotation.RouterUri;
 
+@RouterUri(scheme = "http_scheme",host = "http_host",path = "/http_demo_main")
 public class MainActivity extends AppCompatActivity {
 
     @Override
