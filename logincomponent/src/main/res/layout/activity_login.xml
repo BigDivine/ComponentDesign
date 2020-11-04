@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/login_logo"/>
-    <com.divine.yang.widgetcomponent.widget.EditTextWithClean
+    <com.divine.yang.lib_widget.widget.EditTextWithClean
         android:id="@+id/user_edt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
@@ -22,7 +22,7 @@
         android:drawablePadding="@dimen/dp_10"
         android:textSize="@dimen/sp_16"
         android:background="@drawable/line_et_bg"/>
-    <com.divine.yang.widgetcomponent.widget.EditTextWithClean
+    <com.divine.yang.lib_widget.widget.EditTextWithClean
         android:id="@+id/pwd_edt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
@@ -40,7 +40,7 @@
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_25">
-        <com.divine.yang.widgetcomponent.widget.EditTextWithClean
+        <com.divine.yang.lib_widget.widget.EditTextWithClean
             android:id="@+id/verification_code"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
@@ -50,7 +50,7 @@
             android:textSize="@dimen/sp_16"
             android:background="@drawable/line_et_bg"
             android:layout_weight="1"/>
-        <com.divine.yang.widgetcomponent.widget.RandomVerificationCodeView
+        <com.divine.yang.lib_widget.widget.RandomVerificationCodeView
             android:id="@+id/verifation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

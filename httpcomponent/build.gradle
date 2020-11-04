@@ -74,7 +74,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":basecomponent")
+    implementation project(":lib_base")
 
     if (isHttpRunAlone.toBoolean()) {
         implementation retrofit2.Retrofit

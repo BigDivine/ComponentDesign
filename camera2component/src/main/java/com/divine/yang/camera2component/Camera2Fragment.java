@@ -43,8 +43,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.divine.yang.basecomponent.base.BaseFragment;
-import com.divine.yang.widgetcomponent.widget.AutoFixTextureView;
+import com.divine.yang.lib_base.base.BaseFragment;
+import com.divine.yang.lib_widget.widget.AutoFixTextureView;
 import com.divine.yang.commonutils.FileUtils;
  import com.divine.yang.camera2component.imageselect.PicSelectConfig;
 import com.divine.yang.commonutils.ImageUtils;

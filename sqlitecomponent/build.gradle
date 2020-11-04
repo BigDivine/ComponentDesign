@@ -74,7 +74,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":basecomponent")
+    implementation project(":lib_base")
 
     annotationProcessor wmRouter.RouterCompiler
     annotationProcessor glide.GlideCompiler

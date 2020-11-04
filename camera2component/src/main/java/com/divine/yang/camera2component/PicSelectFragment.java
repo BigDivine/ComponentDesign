@@ -22,8 +22,8 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.divine.yang.basecomponent.base.BaseFragment;
-import com.divine.yang.widgetcomponent.widget.DividerGridItemDecoration;
+import com.divine.yang.lib_base.base.BaseFragment;
+import com.divine.yang.lib_widget.widget.DividerGridItemDecoration;
 import com.divine.yang.commonutils.FileUtils;
 import com.divine.yang.camera2component.imageselect.Camera2Folder;
 import com.divine.yang.camera2component.imageselect.Camera2Image;
@@ -35,7 +35,7 @@ import com.divine.yang.camera2component.imageselect.PicSelectStaticVariable;
 import com.divine.yang.camera2component.imageselect.interfaces.OnFolderChangeListener;
 import com.divine.yang.camera2component.imageselect.interfaces.OnPicSelectFragmentRvItemClickListener;
 import com.divine.yang.camera2component.imageselect.interfaces.PicSelectListener;
-import com.divine.yang.widgetcomponent.widget.CustomViewPager;
+import com.divine.yang.lib_widget.widget.CustomViewPager;
 
 import java.io.File;
 import java.util.ArrayList;

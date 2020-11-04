@@ -62,7 +62,7 @@ android {
 dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":basecomponent")
+    implementation project(":lib_base")
 
     //    #camera2相机拍照模块是否独立运行
     if (!isCamera2RunAlone.toBoolean()) {
@@ -86,7 +86,7 @@ dependencies {
     }
     //    #自定义控件模块是否独立运行
     if (!isWidgetRunAlone.toBoolean()) {
-        implementation project(":widgetcomponent")
+        implementation project(":lib_widget")
     }
     //    #自定义控件模块是否独立运行
     if (!isWebViewRunAlone.toBoolean()) {

@@ -4,8 +4,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
-import com.divine.yang.basecomponent.base.BaseActivity;
-import com.divine.yang.basecomponent.getpermission.PermissionList;
+import com.divine.yang.lib_base.base.BaseActivity;
+import com.divine.yang.lib_base.getpermission.PermissionList;
 import com.sankuai.waimai.router.Router;
 
 import java.io.File;

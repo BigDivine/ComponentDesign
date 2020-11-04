@@ -74,8 +74,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":basecomponent")
-    implementation project(":widgetcomponent")
+    implementation project(":lib_base")
+    implementation project(":lib_widget")
 
     implementation googleAndroid.Material
     implementation androidx.NavigationUI

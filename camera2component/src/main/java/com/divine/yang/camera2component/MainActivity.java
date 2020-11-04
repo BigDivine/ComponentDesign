@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.divine.yang.basecomponent.base.BaseActivity;
-import com.divine.yang.basecomponent.base.BaseToolbar;
-import com.divine.yang.basecomponent.base.ToolbarClickListener;
+import com.divine.yang.lib_base.base.BaseActivity;
+import com.divine.yang.lib_base.base.BaseToolbar;
+import com.divine.yang.lib_base.base.ToolbarClickListener;
 import com.sankuai.waimai.router.annotation.RouterUri;
 
 import java.util.ArrayList;

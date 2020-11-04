@@ -6,9 +6,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import com.divine.yang.basecomponent.base.BaseActivity;
+import com.divine.yang.lib_base.base.BaseActivity;
 import com.divine.yang.commonutils.SharedPreferencesUtils;
-import com.divine.yang.widgetcomponent.widget.EditTextWithClean;
+import com.divine.yang.lib_widget.widget.EditTextWithClean;
 import com.sankuai.waimai.router.annotation.RouterUri;
 
 /**

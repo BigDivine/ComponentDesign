@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import com.divine.yang.basecomponent.base.BaseActivity;
-import com.divine.yang.basecomponent.base.BaseToolbar;
-import com.divine.yang.basecomponent.base.ToolbarClickListener;
-import com.divine.yang.basecomponent.getpermission.PermissionList;
+import com.divine.yang.lib_base.base.BaseActivity;
+import com.divine.yang.lib_base.base.BaseToolbar;
+import com.divine.yang.lib_base.base.ToolbarClickListener;
+import com.divine.yang.lib_base.getpermission.PermissionList;
 import com.divine.yang.commonutils.FileUtils;
 import com.divine.yang.camera2component.imageselect.PicSelectConfig;
 import com.divine.yang.camera2component.imageselect.PicSelectStaticVariable;

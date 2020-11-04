@@ -2,8 +2,8 @@ package com.divine.yang.camera2component;
 
 import android.os.Bundle;
 
-import com.divine.yang.basecomponent.base.BaseActivity;
-import com.divine.yang.basecomponent.getpermission.PermissionList;
+import com.divine.yang.lib_base.base.BaseActivity;
+import com.divine.yang.lib_base.getpermission.PermissionList;
 import com.sankuai.waimai.router.annotation.RouterUri;
 
 import androidx.fragment.app.FragmentManager;

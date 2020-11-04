@@ -23,8 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.divine.yang.basecomponent.base.BaseActivity;
-import com.divine.yang.basecomponent.utils.ActivityUtils;
+import com.divine.yang.lib_base.base.BaseActivity;
+import com.divine.yang.lib_base.utils.ActivityUtils;
 import com.divine.yang.webviewcomponent.client.WebViewInterface;
 import com.divine.yang.webviewcomponent.constant.NmhkUrls;
 import com.divine.yang.webviewcomponent.util.WebViewUtil;
