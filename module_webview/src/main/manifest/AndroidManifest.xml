@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.divine.yang.module_webview">
+
+    <application>
+        <activity android:name=".WebViewActivity"></activity>
+    </application>
+
+</manifest>

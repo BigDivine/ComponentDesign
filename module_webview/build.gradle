@@ -1,0 +1,81 @@
+if (isWebViewRunAlone.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+android {
+    compileSdkVersion versions.compileSdkVersion
+    buildToolsVersion "${versions.buildToolsVersion}"
+
+    defaultConfig {
+        if (isWebViewRunAlone.toBoolean()) {
+            applicationId "com.divine.yang.module_webview"
+        }
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        flavorDimensions "versionCode"
+        productFlavors {
+            DEFAULT {
+                versionCode moudleWebViewVersions.versionCode
+                versionName moudleWebViewVersions.versionName
+                manifestPlaceholders = [
+                        app_name: "WebView应用",
+                        logo    : "@mipmap/ic_launcher",
+                        icon    : "@mipmap/ic_launcher"
+                ]
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            if (isCamera2RunAlone.toBoolean()) {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    if (isCamera2RunAlone.toBoolean()) {
+        android.applicationVariants.all {
+            variant ->
+                variant.outputs.all {
+                    def buildName
+                    def versionName
+                    def releaseTime = new Date().format("yyMMddHHmm")
+                    variant.productFlavors.each { product ->
+                        buildName = product.name
+                        versionName = product.versionName
+                    }
+                    def fileName = "WEBVIEW_${buildName}_V${versionName}.${releaseTime}.apk"
+                    outputFileName = fileName
+                }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(":lib_base")
+
+    annotationProcessor wmRouter.RouterCompiler
+    annotationProcessor glide.GlideCompiler
+}

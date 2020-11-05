@@ -4,7 +4,7 @@
     android:id="@+id/normal_action_bar_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/action_bar_height"
-    android:background="@drawable/navigation_bg_color">
+    android:background="@drawable/shape_gradient_blue_blue">
 
     <LinearLayout
         android:id="@+id/normal_action_bar_left"
@@ -27,7 +27,7 @@
             android:paddingRight="10dp"
             android:background="@android:color/transparent"
             android:paddingBottom="20dp"
-            android:src="@mipmap/icon_toolbar_back_white" />
+            android:src="@mipmap/ic_back_white" />
     </LinearLayout>
 
     <LinearLayout

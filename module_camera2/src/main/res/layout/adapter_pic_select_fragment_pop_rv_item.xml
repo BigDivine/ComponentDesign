@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/adapter_pic_select_fragment_pop_rv_item_img"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:contentDescription="@null"
+        android:padding="@dimen/dp_8"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_default_img_grey_alpha"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/adapter_pic_select_fragment_pop_rv_item_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/adapter_pic_select_fragment_pop_rv_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_8"
+        android:text="123"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/adapter_pic_select_fragment_pop_rv_item_num"
+        app:layout_constraintLeft_toRightOf="@id/adapter_pic_select_fragment_pop_rv_item_img"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/adapter_pic_select_fragment_pop_rv_item_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="@dimen/dp_8"
+        android:text="123"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/adapter_pic_select_fragment_pop_rv_item_img"
+        app:layout_constraintTop_toBottomOf="@id/adapter_pic_select_fragment_pop_rv_item_title" />
+
+
+    <ImageView
+        android:id="@+id/adapter_pic_select_fragment_pop_rv_item_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingRight="@dimen/dp_8"
+        android:src="@mipmap/ic_tick_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:background="#CCCCCC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

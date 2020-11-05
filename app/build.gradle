@@ -66,23 +66,23 @@ dependencies {
 
     //    #camera2相机拍照模块是否独立运行
     if (!isCamera2RunAlone.toBoolean()) {
-        implementation project(":camera2component")
+        implementation project(":module_camera2")
     }
     //    #网络请求模块是否独立运行
     if (!isHttpRunAlone.toBoolean()) {
-        implementation project(":httpcomponent")
+        implementation project(":lib_http")
     }
     //    #仿微信图片编辑模块是否独立运行
     if (!isImageEditRunAlone.toBoolean()) {
-        implementation project(":imageeditcomponent")
+        implementation project(":module_imageedit")
     }
     //    #登录模块是否独立运行
     if (!isLoginRunAlone.toBoolean()) {
-        implementation project(":logincomponent")
+        implementation project(":module_login")
     }
     //    #数据库管理模块是否独立运行
     if (!isSqliteRunAlone.toBoolean()) {
-        implementation project(":sqlitecomponent")
+        implementation project(":lib_sqlite")
     }
     //    #自定义控件模块是否独立运行
     if (!isWidgetRunAlone.toBoolean()) {
@@ -90,7 +90,7 @@ dependencies {
     }
     //    #自定义控件模块是否独立运行
     if (!isWebViewRunAlone.toBoolean()) {
-        implementation project(":webviewcomponent")
+        implementation project(":module_webview")
     }
     annotationProcessor wmRouter.RouterCompiler
     annotationProcessor glide.GlideCompiler
