@@ -11,7 +11,7 @@
         android:layout_height="2dp"
         android:indeterminateOnly="false"
         android:max="100"
-        android:progressDrawable="@drawable/progress_bar_states"
+        android:progressDrawable="@drawable/shape_gradient_blue_blue"
         app:layout_constraintBottom_toTopOf="@id/layout_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

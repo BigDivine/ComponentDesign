@@ -20,9 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".PicSelectActivity" />
-        <activity android:name=".Camera2DemoActivity">
-
-        </activity>
+        <activity android:name=".Camera2DemoActivity"/>
     </application>
 
 </manifest>

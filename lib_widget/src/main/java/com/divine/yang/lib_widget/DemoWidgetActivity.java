@@ -7,7 +7,7 @@ import com.sankuai.waimai.router.annotation.RouterUri;
 import androidx.appcompat.app.AppCompatActivity;
 
 @RouterUri(scheme = "widget_scheme",host = "widget_host",path = "/widget_demo_main")
-public class MainActivity extends AppCompatActivity {
+public class DemoWidgetActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

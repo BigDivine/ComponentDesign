@@ -44,5 +44,5 @@ dependencies {
     api glide.Glide
     api facebook.Fresco
 
-
+    annotationProcessor wmRouter.RouterCompiler
 }

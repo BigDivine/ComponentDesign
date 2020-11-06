@@ -3,7 +3,7 @@
     package="com.divine.yang.lib_widget">
 
     <application>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".DemoWidgetActivity"></activity>
         <activity android:name=".demo.SignatureViewDemoActivity"></activity>
 
     </application>

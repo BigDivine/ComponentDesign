@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.divine.yang.lib_http.R;
+import com.sankuai.waimai.router.annotation.RouterUri;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Observable;
@@ -16,6 +17,7 @@ import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
+@RouterUri(scheme = "http_scheme",host = "http_host",path = "/http_demo_main")
 public class Retrofit2DemoActivity extends AppCompatActivity {
     private TextView tvResponse;
     private CompositeDisposable mCompositeDisposable;

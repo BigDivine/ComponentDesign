@@ -17,6 +17,7 @@ import com.divine.yang.module_imageedit.widget.core.file.IMGContentDecoder;
 import com.divine.yang.module_imageedit.widget.core.file.IMGDecoder;
 import com.divine.yang.module_imageedit.widget.core.file.IMGFileDecoder;
 import com.divine.yang.module_imageedit.widget.core.util.IMGUtils;
+import com.sankuai.waimai.router.annotation.RouterUri;
 
 import static com.divine.yang.module_imageedit.widget.IMGEditBaseActivity.OP_CLIP;
 import static com.divine.yang.module_imageedit.widget.IMGEditBaseActivity.OP_NORMAL;
@@ -26,6 +27,7 @@ import static com.divine.yang.module_imageedit.widget.IMGEditBaseActivity.OP_NOR
  * CreateDate: 2020/9/22
  * Describe:
  */
+@RouterUri(scheme = "image_edit_scheme",host = "image_edit_host",path = "/image_edit_demo_main")
 public class MyIMGEditActivity extends MyIMGEditBaseActivity {
 
     private static final int MAX_WIDTH = 1024;

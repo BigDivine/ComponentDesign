@@ -3,7 +3,7 @@
     package="com.divine.yang.module_login">
 
     <application>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>

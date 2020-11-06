@@ -11,7 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" >
+        <activity
+            android:name=".widget.MyIMGEditActivity"
+            android:theme="@style/ImageEditTheme"
+            android:windowSoftInputMode="stateAlwaysHidden"  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -25,10 +28,7 @@
             android:name=".widget.IMGEditActivity"
             android:theme="@style/ImageEditTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".widget.MyIMGEditActivity"
-            android:theme="@style/ImageEditTheme"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+
 
     </application>
 

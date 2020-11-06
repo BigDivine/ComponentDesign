@@ -38,4 +38,5 @@ dependencies {
     implementation androidx.NavigationFragment
     implementation googleAndroid.Material
 
+    annotationProcessor wmRouter.RouterCompiler
 }
