@@ -39,6 +39,7 @@ dependencies {
     api androidx.RecyclerView
     api androidx.AppCompat
     api androidx.ConstraintLayout
+    api androidx.ViewPager2
 
     api wmRouter.Router
     api glide.Glide

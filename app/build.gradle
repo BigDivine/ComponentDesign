@@ -63,6 +63,8 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":lib_base")
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     //    #camera2相机拍照模块是否独立运行
     if (!isCamera2RunAlone.toBoolean()) {

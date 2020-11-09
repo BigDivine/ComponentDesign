@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.divine.yang.lib_base.base.BaseActivity;
+import com.divine.yang.lib_base.base.BaseToolbar;
 import com.divine.yang.lib_base.getpermission.PermissionList;
 import com.sankuai.waimai.router.Router;
 
@@ -21,16 +22,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean showToolbar() {
-        return false;
+        return true;
     }
 
     @Override
     public void initView() {
-        File exDir = Environment.getExternalStorageDirectory();
-        File[] list = exDir.listFiles();
-        for (File str : list) {
-            Log.e("MainActivity", str.getAbsolutePath());
-        }
+        BaseToolbar toolbar = getBaseToolbar();
+        toolbar.setLeftVisible(false);
+        toolbar.setRightVisible(false);
+        toolbar.setTitle("导航");
     }
 
     @Override

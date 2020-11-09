@@ -9,6 +9,7 @@
     <color name="content_bg_color">#F2F5FB</color>
     <color name="main_navigation_bg_color">#F9F9F9</color>
     <color name="back_black">#323232</color>
+    <color name="back_black_half_alpha">#80323232</color>
     <color name="back_blue">#276EEB</color>
     <color name="bottom_bg">#aaaaaa</color>
     <color name="red_text">#FB514B</color>
