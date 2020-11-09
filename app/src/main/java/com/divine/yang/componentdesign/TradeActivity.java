@@ -1,6 +1,10 @@
 package com.divine.yang.componentdesign;
 
+import android.content.SharedPreferences;
+import android.view.View;
+
 import com.divine.yang.lib_base.base.BaseActivity;
+import com.sankuai.waimai.router.Router;
 import com.sankuai.waimai.router.annotation.RouterUri;
 
 import androidx.viewpager2.widget.ViewPager2;
@@ -24,6 +28,9 @@ public class TradeActivity extends BaseActivity {
 
         TradeAdapter adapter = new TradeAdapter(this);
         vp.setAdapter(adapter);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean("first_launch_app", false).apply();
     }
 
     @Override
@@ -34,5 +41,10 @@ public class TradeActivity extends BaseActivity {
     @Override
     public String[] requestPermissions() {
         return new String[0];
+    }
+
+    public void skipTrade(View view) {
+        Router.startUri(this, RouterPaths.RouterLogin);
+        this.finish();
     }
 }
