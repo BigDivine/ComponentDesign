@@ -3,8 +3,9 @@
     <attr name="titleText" format="string" />
     <attr name="textColor" format="color" />
     <attr name="titleSize" format="dimension" />
-    <attr name="pointSize" format="integer"/>
-    <attr name="lineSize" format="integer"/>
+    <attr name="pointSize" format="integer" />
+    <attr name="lineSize" format="integer" />
+
     <declare-styleable name="MyVerificationCode">
         <attr name="titleText" />
         <attr name="textColor" />
@@ -48,5 +49,39 @@
             <enum name="Top" value="1" />
             <enum name="Bottom" value="3" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BrokenlineView">
+        <attr name="X_axis_color" format="color" />
+        <attr name="X_axis_text_color" format="color" />
+        <attr name="X_axis_text_size" format="dimension" />
+        <attr name="X_axis_width" format="dimension" />
+        <attr name="broken_line_color" format="color" />
+        <attr name="broken_line_width" format="dimension" />
+        <attr name="broken_line_dot_color" format="color" />
+        <attr name="broken_line_dot_mode" format="enum">
+            <!--实心点-->
+            <enum name="solid" value="0" />
+            <!--空心点-->
+            <enum name="hollow" value="1" />
+            <!--无边框空心点-->
+            <!--<enum name="frameless" value="2" />-->
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ColorBar">
+        <attr name="colorHeight" format="dimension" />
+        <attr name="function" format="color" />
+        <attr name="idling" format="color" />
+        <attr name="rest" format="color" />
+
+    </declare-styleable>
+
+    <declare-styleable name="PieView">
+        <attr name="centerTextSize" format="dimension" />
+        <attr name="dataTextSize" format="dimension" />
+        <attr name="circleWidth" format="dimension" />
+        <attr name="centerTextColor" format="color" />
+        <attr name="dataTextColor" format="color" />
     </declare-styleable>
 </resources>

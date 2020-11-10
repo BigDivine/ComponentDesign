@@ -10,19 +10,19 @@ import java.util.Map;
  * CreateDate: 2020/9/11
  * Describe:
  */
-public class SharedPreferencesUtils {
-    private static SharedPreferencesUtils mSharedPreferencesUtils;
+public class SPUtils {
+    private static SPUtils mSharedPreferencesUtils;
     private SharedPreferences sp;
 
-    private SharedPreferencesUtils(Context context) {
+    private SPUtils(Context context) {
         sp = context.getSharedPreferences(context.getPackageName(), context.MODE_PRIVATE);
     }
 
-    public static SharedPreferencesUtils getInstance(Context context) {
+    public static SPUtils getInstance(Context context) {
         if (null == mSharedPreferencesUtils) {
-            synchronized (SharedPreferencesUtils.class) {
+            synchronized (SPUtils.class) {
                 if (null == mSharedPreferencesUtils) {
-                    mSharedPreferencesUtils = new SharedPreferencesUtils(context);
+                    mSharedPreferencesUtils = new SPUtils(context);
                 }
             }
         }
