@@ -29,6 +29,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private boolean isRememberUser;
 
     private boolean isRememberPWD;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     @Override
     public int getContentViewId() {
@@ -50,20 +51,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         remember_user.setOnCheckedChangeListener(this);
         remember_pwd.setOnCheckedChangeListener(this);
         login_btn.setOnClickListener(this);
+
+        sharedPreferencesUtils = SharedPreferencesUtils.getInstance(this);
     }
 
     @Override
     public void getData() {
-        String username = (String) SharedPreferencesUtils.get(this, "vpnUsername", "");
-        String password = (String) SharedPreferencesUtils.get(this, "vpnPassword", "");
+        String username = (String) sharedPreferencesUtils.get("user_name", "");
+        String password = (String) sharedPreferencesUtils.get("user_pwd", "");
 
         user_edt.setText(username);
         pwd_edt.setText(password);
-    }
-
-    @Override
-    public String[] requestPermissions() {
-        return new String[0];
     }
 
     @Override

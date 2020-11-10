@@ -132,7 +132,7 @@ public class Camera2Fragment extends BaseFragment implements TextureView.Surface
     private ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
-            File file = new File(FileUtils.getAppPath() + "/IMG_" + ImageUtils.setImageName() + ".jpg");
+            File file = new File(FileUtils.getAppPath() + "/IMG_" + FileUtils.makeFileName() + ".jpg");
             mPicSavePath = file.getAbsolutePath();
             FileOutputStream fileOutputStream;
             try {    //进行相片存储

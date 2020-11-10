@@ -7,19 +7,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.divine.yang.lib_base.BaseDemoActivity;
-import com.divine.yang.lib_base.R;
-import com.divine.yang.lib_base.utils.ActivitiesManager;
 import com.divine.yang.lib_base.getpermission.PermissionPageUtils;
 import com.divine.yang.lib_base.getpermission.PermissionUtil;
+import com.divine.yang.lib_base.utils.ActivitiesManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,14 +58,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 页面发出请求，获取页面的数据
      */
-    public abstract void getData();
+    public void getData() {}
 
     /**
      * 需要动态获取的权限
      *
      * @return
      */
-    public abstract String[] requestPermissions();
+    public String[] requestPermissions() {
+        return new String[0];
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

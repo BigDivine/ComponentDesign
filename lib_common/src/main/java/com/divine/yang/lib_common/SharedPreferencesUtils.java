@@ -11,16 +11,28 @@ import java.util.Map;
  * Describe:
  */
 public class SharedPreferencesUtils {
-    /**
-     * 保存在手机里的SP文件名
-     */
-    public static final String FILE_NAME = "my_sp";
+    private static SharedPreferencesUtils mSharedPreferencesUtils;
+    private SharedPreferences sp;
+
+    private SharedPreferencesUtils(Context context) {
+        sp = context.getSharedPreferences(context.getPackageName(), context.MODE_PRIVATE);
+    }
+
+    public static SharedPreferencesUtils getInstance(Context context) {
+        if (null == mSharedPreferencesUtils) {
+            synchronized (SharedPreferencesUtils.class) {
+                if (null == mSharedPreferencesUtils) {
+                    mSharedPreferencesUtils = new SharedPreferencesUtils(context);
+                }
+            }
+        }
+        return mSharedPreferencesUtils;
+    }
 
     /**
      * 保存数据
      */
-    public static void put(Context context, String key, Object obj) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
+    public void put(String key, Object obj) {
         SharedPreferences.Editor editor = sp.edit();
         if (obj instanceof Boolean) {
             editor.putBoolean(key, (Boolean) obj);
@@ -40,8 +52,7 @@ public class SharedPreferencesUtils {
     /**
      * 获取指定数据
      */
-    public static Object get(Context context, String key, Object defaultObj) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
+    public Object get(String key, Object defaultObj) {
         if (defaultObj instanceof Boolean) {
             return sp.getBoolean(key, (Boolean) defaultObj);
         } else if (defaultObj instanceof Float) {
@@ -59,8 +70,7 @@ public class SharedPreferencesUtils {
     /**
      * 删除指定数据
      */
-    public static void remove(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
+    public void remove(String key) {
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(key);
         editor.commit();
@@ -70,8 +80,7 @@ public class SharedPreferencesUtils {
     /**
      * 返回所有键值对
      */
-    public static Map<String, ?> getAll(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
+    public Map<String, ?> getAll() {
         Map<String, ?> map = sp.getAll();
         return map;
     }
@@ -79,8 +88,7 @@ public class SharedPreferencesUtils {
     /**
      * 删除所有数据
      */
-    public static void clear(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
+    public void clear() {
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
         editor.commit();
@@ -89,8 +97,7 @@ public class SharedPreferencesUtils {
     /**
      * 检查key对应的数据是否存在
      */
-    public static boolean contains(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
+    public boolean contains(String key) {
         return sp.contains(key);
     }
 }

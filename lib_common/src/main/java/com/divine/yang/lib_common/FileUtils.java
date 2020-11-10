@@ -7,6 +7,10 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 
 /**
  * Author: Divine
@@ -77,14 +81,15 @@ public class FileUtils {
             } else {
                 createDir(file.getParentFile().getAbsolutePath());
                 file.createNewFile();
-                Log.i(TAG,"----- 创建文件" + file.getAbsolutePath());
+                Log.i(TAG, "----- 创建文件" + file.getAbsolutePath());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
     }
-    /*
+
+    /**
      * 获取该应用的根目录
      */
     public static String getAppPath() {
@@ -93,20 +98,46 @@ public class FileUtils {
         }
         File sdRoot = Environment.getExternalStorageDirectory();
         File file = new File(sdRoot.getAbsolutePath() + "/ImageListSrc/");
-        if (!file.exists()) file.mkdir();
+        if (!file.exists())
+            file.mkdir();
         return file.getAbsolutePath();
     }
-    public static String getApplicationId(Context appContext) throws IllegalArgumentException {
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = appContext.getPackageManager().getApplicationInfo(appContext.getPackageName(), PackageManager.GET_META_DATA);
-            if (applicationInfo == null) {
-                throw new IllegalArgumentException(" get application info = null, has no meta data! ");
-            }
-            Log.d(TAG,appContext.getPackageName() + " " + applicationInfo.metaData.getString("APP_ID"));
-            return applicationInfo.metaData.getString("APP_ID");
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new IllegalArgumentException(" get application info error! ", e);
+
+    /**
+     * 根据文件绝对路径，获取文件名
+     *
+     * @param path
+     * @return
+     */
+    public static String getFileName(String path) {
+        String temp[] = path.replaceAll("\\\\", "/").split("/");
+        String fileName = "";
+        if (temp.length > 1) {
+            fileName = temp[temp.length - 1];
         }
+        return fileName;
     }
+
+    /**
+     * 生成一个2020111021548663(yyyyMMdd+8位随机数)的文件名
+     * @return
+     */
+    public static String makeFileName() {
+        String name;
+        //生成8位随机数
+        String SYMBOLS = "0123456789";
+        Random RANDOM = new SecureRandom();
+        char[] nonceChars = new char[8];
+        for (int index = 0; index < nonceChars.length; ++index) {
+            nonceChars[index] = SYMBOLS.charAt(RANDOM.nextInt(SYMBOLS.length()));
+        }
+        //生成时间信息
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date(System.currentTimeMillis());
+        //组合文件名
+        name = sf.format(date) + new String(nonceChars);
+        return name;
+    }
+
+
 }
