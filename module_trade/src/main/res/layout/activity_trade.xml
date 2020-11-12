@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TradeActivity">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/trade_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/skip_trade"
+        android:layout_width="@dimen/dp_132"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:background="@color/back_black_half_alpha"
+        android:onClick="skipTrade"
+        android:text="跳过引导"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

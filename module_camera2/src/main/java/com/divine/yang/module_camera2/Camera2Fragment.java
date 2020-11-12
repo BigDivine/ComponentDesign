@@ -67,7 +67,9 @@ import androidx.core.app.ActivityCompat;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Create by ZeeLion on 2020/9/29
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
 public class Camera2Fragment extends BaseFragment implements TextureView.SurfaceTextureListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     // 相机预览布局，拍照界面头部布局，动作按钮布局

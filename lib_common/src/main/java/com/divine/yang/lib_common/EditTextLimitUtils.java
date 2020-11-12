@@ -8,9 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Create by dinglp on 2018/12/20
- * 站在顶峰，看世界
- * 落在谷底，思人生
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
 public class EditTextLimitUtils {
     /**

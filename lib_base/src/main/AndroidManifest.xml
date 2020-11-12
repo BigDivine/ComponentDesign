@@ -2,10 +2,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.divine.yang.lib_base">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <application>
-        <activity android:name=".BaseDemoActivity" />
-    </application>
-
 </manifest>

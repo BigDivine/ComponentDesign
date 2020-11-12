@@ -5,10 +5,11 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 /**
- * Create by dinglp on 2018/12/3
- * 站在顶峰，看世界
- * 落在谷底，思人生
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
+
 public class DensityUtils {
     /**
      * 将px值转换为 dip或dp值，保证尺寸大小不变

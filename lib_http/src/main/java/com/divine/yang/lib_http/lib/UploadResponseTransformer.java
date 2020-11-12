@@ -7,11 +7,13 @@ import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.Function;
 
-/**
- * Created by Zaifeng on 2018/2/28.
- * 对返回的数据进行处理，区分异常的情况。
- */
 
+/**
+ * 对返回的数据进行处理，区分异常的情况。
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
+ */
 public class UploadResponseTransformer {
 
     public static <T> ObservableTransformer<? super T, ?> handleResult() {

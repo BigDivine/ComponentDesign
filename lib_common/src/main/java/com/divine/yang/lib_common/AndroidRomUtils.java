@@ -19,7 +19,6 @@ import java.util.Set;
  * CreateDate: 2020/10/20
  * Describe:
  */
-
 public class AndroidRomUtils {
 
     private static final String KEY_EMUI_VERSION_CODE = "ro.build.version.emui";

@@ -10,7 +10,9 @@ import java.util.ArrayList;
 
 /**
  * 动态权限工具类
- * Created by dway on 2017/1/13.
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
 public class PermissionUtil {
 

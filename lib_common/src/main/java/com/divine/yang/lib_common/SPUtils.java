@@ -11,7 +11,7 @@ import java.util.Map;
  * Describe:
  */
 public class SPUtils {
-    private static SPUtils mSharedPreferencesUtils;
+    private static SPUtils mSPUtils;
     private SharedPreferences sp;
 
     private SPUtils(Context context) {
@@ -19,14 +19,14 @@ public class SPUtils {
     }
 
     public static SPUtils getInstance(Context context) {
-        if (null == mSharedPreferencesUtils) {
+        if (null == mSPUtils) {
             synchronized (SPUtils.class) {
-                if (null == mSharedPreferencesUtils) {
-                    mSharedPreferencesUtils = new SPUtils(context);
+                if (null == mSPUtils) {
+                    mSPUtils = new SPUtils(context);
                 }
             }
         }
-        return mSharedPreferencesUtils;
+        return mSPUtils;
     }
 
     /**

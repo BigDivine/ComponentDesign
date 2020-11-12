@@ -19,10 +19,10 @@ import java.util.List;
 
 /**
  * 权限请求页适配，不同手机系统跳转到不同的权限请求页
- *
- * @author Donkor
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
-
 public class PermissionPageUtils {
     private final String TAG = "PermissionPageManager";
     private final Context mContext;

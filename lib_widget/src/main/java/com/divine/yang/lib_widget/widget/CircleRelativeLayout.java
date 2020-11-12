@@ -9,6 +9,12 @@ import android.widget.RelativeLayout;
 
 import com.divine.yang.lib_widget.R;
 
+
+/**
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
+ */
 public class CircleRelativeLayout extends RelativeLayout {
     private Paint mPaint;
     private int color;
@@ -50,12 +56,12 @@ public class CircleRelativeLayout extends RelativeLayout {
     public void setColor(int color) { //设置背景色
         this.color = color;
         setColors();
-        invalidate();
+        postInvalidate();
     }
 
     public void setAlhpa(int alhpa) { //设置透明度
         this.alpha = alhpa;
-        invalidate();
+        postInvalidate();
     }
 
 
@@ -63,8 +69,8 @@ public class CircleRelativeLayout extends RelativeLayout {
         int red = (color & 0xff0000) >> 16;
         int green = (color & 0x00ff00) >> 8;
         int blue = (color & 0x0000ff);
-        //        this.colors = new int[]{red, green, blue};
-        this.colors = new int[]{255, 255, 255};
+        this.colors = new int[]{red, green, blue};
+//        this.colors = new int[]{255, 255, 255};
     }
 
 }

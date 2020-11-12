@@ -23,6 +23,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.divine.yang.lib_base.base.BaseFragment;
+import com.divine.yang.lib_common.SystemUtils;
 import com.divine.yang.lib_widget.widget.DividerGridItemDecoration;
 import com.divine.yang.lib_common.FileUtils;
 import com.divine.yang.module_camera2.imageselect.Camera2Folder;
@@ -238,11 +239,11 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void createPopupFolderList(int width, int height) {
-        View rootView = LayoutInflater.from(mContext).inflate(R.layout.common_layout_with_rv, null,false);
+        View rootView = LayoutInflater.from(mContext).inflate(R.layout.common_layout_with_rv, null, false);
         rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         RecyclerView commonRecyclerView = rootView.findViewById(R.id.common_layout_rv);
         popupWindow = new PopupWindow(getActivity());
-          popupWindow.setContentView(rootView);
+        popupWindow.setContentView(rootView);
         //点击外部弹出不消失
         popupWindow.setFocusable(false);
         popupWindow.setOutsideTouchable(false);
@@ -301,8 +302,8 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
                 //                if (popupWindow.getListView() != null) {
                 //                    popupWindow.getListView().setDivider(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.bottom_bg)));
                 //                }
-//                int index = mPicSelectFragmentPopRvAdapter.getSelectIndex();
-//                index = index == 0 ? index : index - 1;
+                //                int index = mPicSelectFragmentPopRvAdapter.getSelectIndex();
+                //                index = index == 0 ? index : index - 1;
                 //                popupWindow.getListView().setSelection(index);
 
                 //                popupWindow.getListView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -345,8 +346,7 @@ public class PicSelectFragment extends BaseFragment implements View.OnClickListe
             Log.e("D-picSelectFragment", tempFile.getAbsolutePath());
             FileUtils.createFile(tempFile);
 
-            Uri uri = FileProvider.getUriForFile(getActivity(),
-                                                 FileUtils.getApplicationId(getActivity()) + ".image_provider", tempFile);
+            Uri uri = FileProvider.getUriForFile(getActivity(), SystemUtils.getApplicationId(getActivity()) + ".image_provider", tempFile);
 
             List<ResolveInfo> resInfoList = getActivity().getPackageManager()
                     .queryIntentActivities(cameraIntent, PackageManager.MATCH_DEFAULT_ONLY);

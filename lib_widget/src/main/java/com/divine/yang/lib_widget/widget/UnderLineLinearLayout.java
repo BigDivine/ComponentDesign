@@ -14,11 +14,10 @@ import android.widget.LinearLayout;
 
 import com.divine.yang.lib_widget.R;
 
-
 /**
- * Create by dinglp on 2018/11/29
- * 站在顶峰，看世界
- * 落在谷底，思人生
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
 public class UnderLineLinearLayout extends LinearLayout {
     //=============================================================line gravity常量定义
@@ -90,7 +89,7 @@ public class UnderLineLinearLayout extends LinearLayout {
         pointColor = attr.getColor(R.styleable.UnderLineLinearLayout_point_color, 0xff3dd1a5);
         lineGravity = attr.getInt(R.styleable.UnderLineLinearLayout_line_gravity, GRAVITY_LEFT);
 
-        int iconRes = attr.getResourceId(R.styleable.UnderLineLinearLayout_icon_src, R.drawable.shape_blue_point_10dp);
+        int iconRes = attr.getResourceId(R.styleable.UnderLineLinearLayout_icon_src, R.drawable.dash_line_point);
 
         // mIcon = BitmapFactory.decodeResource(context.getResources(), iconRes);
 

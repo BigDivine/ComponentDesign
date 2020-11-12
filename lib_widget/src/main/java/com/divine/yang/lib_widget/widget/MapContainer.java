@@ -7,9 +7,9 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 /**
- * Create by dinglp on 2018/11/30
- * 站在顶峰，看世界
- * 落在谷底，思人生
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
 public class MapContainer extends RelativeLayout {
     private ScrollView scrollView;

@@ -6,16 +6,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
- * Create by dinglp on 2018/11/29
- * 站在顶峰，看世界
- * 落在谷底，思人生
+ * Author: Divine
+ * CreateDate: 2020/10/20
+ * Describe:
  */
 public class RecycleViewDivider extends RecyclerView.ItemDecoration {
     private Paint paint;
