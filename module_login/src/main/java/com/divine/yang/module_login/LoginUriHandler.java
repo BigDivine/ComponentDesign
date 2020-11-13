@@ -1,8 +1,7 @@
-package com.divine.yang.module_main;
+package com.divine.yang.module_login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.sankuai.waimai.router.Router;
 import com.sankuai.waimai.router.annotation.RouterUri;
@@ -15,25 +14,24 @@ import androidx.annotation.NonNull;
 
 /**
  * Author: Divine
- * CreateDate: 2020/11/12
+ * CreateDate: 2020/11/13
  * Describe:
  */
-@RouterUri(scheme = "main_scheme", host = "main_host", path = "/main",
-        interceptors = MainUriInterceptor.class)
-public class MainUriHandler extends UriHandler {
+@RouterUri(scheme = "login_scheme", host = "login_host", path = "/login_main",
+        interceptors = LoginUriInterceptor.class)
+public class LoginUriHandler extends UriHandler {
     @Override
     protected boolean shouldHandle(@NonNull UriRequest request) {
-        Log.e("aaa", request.getUri().toString());
         return true;
     }
 
     @Override
     protected void handleInternal(@NonNull UriRequest request, @NonNull UriCallback callback) {
-        Log.e("bbb", request.getUri().toString());
-        Context context = request.getContext();
-        context.startActivity(new Intent(context, MainActivity.class));
-        callback.onComplete(UriResult.CODE_SUCCESS);
-        //        Router.startUri(request.getContext(), "login_scheme://login_host/login_main");
-
+        if (null != request) {
+            Router.startUri(request);
+            callback.onComplete(UriResult.CODE_SUCCESS);
+        } else {
+            callback.onComplete(UriResult.CODE_ERROR);
+        }
     }
 }

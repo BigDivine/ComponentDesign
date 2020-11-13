@@ -1,3 +1,4 @@
+include ':lib_router'
 include ':module_main'
 include ':module_trade'
 include ':lib_common'

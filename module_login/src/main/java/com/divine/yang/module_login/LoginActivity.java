@@ -17,10 +17,9 @@ import com.sankuai.waimai.router.annotation.RouterUri;
  * CreateDate: 2020/11/03
  * Describe: 登录模块界面
  */
-@RouterUri(scheme = "login_scheme", host = "login_host", path = "/login_main")
 public class LoginActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "divine_login";
     private EditTextWithClean user_edt;
     private EditTextWithClean pwd_edt;
     private CheckBox remember_user;
@@ -53,6 +52,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         remember_pwd.setOnCheckedChangeListener(this);
         login_btn.setOnClickListener(this);
 
+        Log.e(TAG, getPackageName());
         mSPUtils = SPUtils.getInstance(this);
     }
 
@@ -69,7 +69,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         Log.e("dinglp", isRememberUser + "");
         Log.e("dinglp", isRememberPWD + "");
-//                startActivity(new Intent(this, NectarLauncher.class));
+        //                startActivity(new Intent(this, NectarLauncher.class));
+        mSPUtils.put("is_login", true);
+
     }
 
     @Override

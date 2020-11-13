@@ -1,6 +1,7 @@
 package com.divine.yang.module_main;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.divine.yang.lib_common.SPUtils;
 import com.sankuai.waimai.router.Router;
@@ -16,16 +17,19 @@ import androidx.annotation.NonNull;
  * CreateDate: 2020/11/12
  * Describe:
  */
-public class MainRouteInterceptors implements UriInterceptor {
+public class MainUriInterceptor implements UriInterceptor {
+    private final String TAG="MainUriInterceptor";
 
     @Override
     public void intercept(@NonNull UriRequest request, @NonNull UriCallback callback) {
         Context mContext = request.getContext();
-        boolean firstLaunch = (boolean) SPUtils.getInstance(mContext).get("first_launcher_app", false);
-        if (firstLaunch) {
-            Router.startUri(mContext, "trade_host://trade_scheme/trade_main");
+        Log.e(TAG, mContext.getPackageName());
+
+        boolean isLogin = (boolean) SPUtils.getInstance(mContext).get("is_login", false);
+        if (!isLogin) {
+            Router.startUri(mContext, "login_scheme://login_host/login_main");
         } else {
-            Router.startUri(mContext, "login_host://login_scheme/login_main");
+            callback.onNext();
         }
         callback.onComplete(UriResult.CODE_SUCCESS);
     }

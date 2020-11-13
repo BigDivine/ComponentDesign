@@ -7,11 +7,11 @@ import com.divine.yang.lib_base.base.BaseToolbar;
 import com.divine.yang.lib_base.getpermission.PermissionList;
 import com.sankuai.waimai.router.Router;
 
-public class MainActivity extends BaseActivity {
+public class AppActivity extends BaseActivity {
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_main;
+        return R.layout.activity_app;
     }
 
     @Override

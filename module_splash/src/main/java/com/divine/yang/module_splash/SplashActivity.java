@@ -1,16 +1,17 @@
 package com.divine.yang.module_splash;
 
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import com.divine.yang.lib_common.SPUtils;
 import com.sankuai.waimai.router.Router;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class SplashActivity extends AppCompatActivity {
+    private final String TAG = "divine_splash";
+
     private VideoView videoAD;
     private ImageView imageAD;
     private Button btnTimer;
@@ -50,36 +53,34 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         initView();
+        initSplash();
     }
 
     public void initView() {
         isJumpToNext = false;
-
         videoAD = findViewById(R.id.video_advertisement);
         imageAD = findViewById(R.id.image_advertisement);
         btnTimer = findViewById(R.id.timer_view);
+    }
 
+    private void initSplash() {
+        Log.e(TAG, getPackageName());
+
+        SPUtils mSPUtils = SPUtils.getInstance(this);
+        firstLaunchApp = (boolean) mSPUtils.get("first_launch_app", true);
+        if (firstLaunchApp) {
+            mSPUtils.put("first_launch_app", true);
+        }
 
         videoUriStr = "android.resource://" + getPackageName() + "/" + R.raw.video_advertisement;
-
         startVideo();
         startTimer();
-
-
         btnTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stopTimer();
             }
         });
-
-        SharedPreferences sharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-        firstLaunchApp = sharedPreferences.getBoolean("first_launch_app", true);
-        if (firstLaunchApp) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("first_launch_app", true);
-            editor.apply();
-        }
     }
 
     protected String getMainRouteUri() {

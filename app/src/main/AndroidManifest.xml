@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".TradeActivity"></activity>
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".AppActivity"></activity>
     </application>
 
 </manifest>

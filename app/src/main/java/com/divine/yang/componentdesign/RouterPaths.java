@@ -6,6 +6,7 @@ package com.divine.yang.componentdesign;
  * Describe:
  */
 public class RouterPaths {
+    public static final String RouterMain = "main_scheme://main_host/main";
     public static final String RouterBase = "base_scheme://base_host/base_demo_main";
     public static final String RouterCamera2 = "camera2_scheme://camera2_host/camera2_demo_main";
     public static final String RouterHttp = "http_scheme://http_host/http_demo_main";
