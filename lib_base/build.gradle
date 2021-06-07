@@ -33,10 +33,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     api project(":lib_common")
-    api project(":lib_router")
 
-    implementation androidx.NavigationUI
-    implementation androidx.NavigationFragment
     implementation googleAndroid.Material
 
     annotationProcessor wmRouter.RouterCompiler

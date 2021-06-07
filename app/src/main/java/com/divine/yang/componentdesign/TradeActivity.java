@@ -10,7 +10,7 @@ import com.sankuai.waimai.router.annotation.RouterUri;
 
 import androidx.viewpager2.widget.ViewPager2;
 
-@RouterUri(scheme = "trade_scheme", host = "trade_host", path = "/trade_main")
+//@RouterUri(scheme = "trade_scheme", host = "trade_host", path = "/trade_main")
 public class TradeActivity extends BaseActivity {
     private final String TAG = "divine_trade";
 
@@ -47,6 +47,5 @@ public class TradeActivity extends BaseActivity {
 
     public void skipTrade(View view) {
         Router.startUri(this, RouterPaths.RouterMain);
-        this.finish();
     }
 }

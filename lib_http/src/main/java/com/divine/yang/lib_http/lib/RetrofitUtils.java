@@ -6,6 +6,7 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okio.ByteString;
 
 /**
  * author: Divine
@@ -14,25 +15,25 @@ import okhttp3.RequestBody;
  */
 public class RetrofitUtils {
 
-    //    /**
-    //     * 将string转换成retrofit请求传body对应的类型
-    //     *
-    //     * @param json
-    //     * @return
-    //     */
-    //    public static RequestBody String2RequestBody(String json) {
-    //        return RequestBody.create(Params.MEDIA_TYPE, json);
-    //    }
-    //
-    //    /**
-    //     * 将byteString（即byte转的string）转换成retrofit请求传body对应的类型
-    //     *
-    //     * @param json
-    //     * @return
-    //     */
-    //    public static RequestBody ByteString2RequestBody(ByteString json) {
-    //        return RequestBody.create(Params.MEDIA_TYPE, json);
-    //    }
+        /**
+         * 将string转换成retrofit请求传body对应的类型
+         *
+         * @param json
+         * @return
+         */
+        public static RequestBody String2RequestBody(String json) {
+            return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        }
+
+        /**
+         * 将byteString（即byte转的string）转换成retrofit请求传body对应的类型
+         *
+         * @param json
+         * @return
+         */
+        public static RequestBody ByteString2RequestBody(ByteString json) {
+            return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        }
 
     /**
      * 创建file上传

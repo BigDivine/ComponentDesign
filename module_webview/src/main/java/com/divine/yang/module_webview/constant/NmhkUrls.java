@@ -11,23 +11,12 @@ public class NmhkUrls extends Constants {
     //    内蒙机场--航空制单
     public static String version = "1.0";
 
-    //yzl地址
-    //    public static String baseIP = "10.1.13.41";
-    //    public static String basePort=":8097/";
-    //    public static String url = "";
-
-    //lc地址
-    //    public static String baseIP = "10.1.103.69";
-    //    public static String basePort=":8097/";
-    //    public static String url = "";
-
     //现场测试
     public static String baseIP = "58.18.166.138";
     public static String basePort = ":9100";
     public static String url = "/index.html#/?version=" + version;
 
     public static String base = "http://" + baseIP + basePort;
-    //    public static String base = "http://10.2.41.203";//:version="1.0"
 
     //本应用专属目录
     //应用根目录

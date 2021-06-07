@@ -70,5 +70,6 @@
     <dimen name="power_consumption_rankings_dimen_main_battery_level_width">22dp</dimen>
     <!--电池 最大高度-->
     <dimen name="power_consumption_rankings_dimen_main_battery_level_max_height">35dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
 
 </resources>

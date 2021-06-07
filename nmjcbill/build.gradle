@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+// 应用WMRouter插件
+apply plugin: 'WMRouter'
+android {
+
+    compileSdkVersion versions.compileSdkVersion
+    buildToolsVersion "${versions.buildToolsVersion}"
+
+    defaultConfig {
+        applicationId "com.divine.yang.nmjcbill"
+
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        flavorDimensions "versionCode"
+        productFlavors {
+            DEFAULT {
+                versionCode nmjcVersions.versionCode
+                versionName nmjcVersions.versionName
+                manifestPlaceholders = [
+                        app_name: "内蒙机场",
+                        logo    : "@mipmap/ic_launcher",
+                        icon    : "@mipmap/ic_launcher"
+                ]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                def buildName
+                def versionName
+                def releaseTime = new Date().format("yyMMddHHmm")
+                variant.productFlavors.each { product ->
+                       buildName = product.name
+                    versionName = product.versionName
+                }
+                def fileName = "CLOUD_${buildName}_V${versionName}.${releaseTime}.apk"
+                outputFileName = fileName
+            }
+    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(":lib_base")
+
+    implementation project(":nmjc_router")
+    implementation project(":nmjc_login")
+    implementation project(":nmjc_main")
+    implementation project(":module_splash")
+
+    annotationProcessor wmRouter.RouterCompiler
+    annotationProcessor glide.GlideCompiler
+}

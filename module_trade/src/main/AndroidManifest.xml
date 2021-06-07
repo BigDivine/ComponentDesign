@@ -1,7 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.divine.yang.module_trade">
-
-    <application>
-        <activity android:name=".TradeActivity" />
-    </application>
-</manifest>

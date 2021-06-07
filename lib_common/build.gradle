@@ -36,6 +36,7 @@ dependencies {
     api androidxTest.TestExtJunit
     api androidxTest.EspressoCore
     api Junits.Junit
+    api androidx.LifecycleExtensions
     api androidx.RecyclerView
     api androidx.AppCompat
     api androidx.ConstraintLayout

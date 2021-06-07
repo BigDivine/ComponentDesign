@@ -63,11 +63,8 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":lib_base")
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     implementation project(":module_splash")
-    implementation project(":module_main")
     //    #camera2相机拍照模块是否独立运行
     if (!isCamera2RunAlone.toBoolean()) {
         implementation project(":module_camera2")
@@ -82,7 +79,7 @@ dependencies {
     }
     //    #登录模块是否独立运行
     if (!isLoginRunAlone.toBoolean()) {
-        implementation project(":module_login")
+        implementation project(":nmjc_login")
     }
     //    #数据库管理模块是否独立运行
     if (!isSqliteRunAlone.toBoolean()) {

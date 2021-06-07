@@ -2,7 +2,6 @@ package com.divine.yang.module_splash;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,20 +10,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import com.divine.yang.lib_base.base.BaseActivity;
 import com.divine.yang.lib_common.SPUtils;
 import com.sankuai.waimai.router.Router;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-
-public class SplashActivity extends AppCompatActivity {
+public abstract class SplashActivity extends BaseActivity {
     private final String TAG = "divine_splash";
 
     private VideoView videoAD;
     private ImageView imageAD;
     private Button btnTimer;
-
     private boolean firstLaunchApp;
 
     private String videoUriStr;
@@ -49,11 +45,13 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        initView();
-        initSplash();
+    public int getContentViewId() {
+        return R.layout.activity_splash;
+    }
+
+    @Override
+    public boolean showToolbar() {
+        return false;
     }
 
     public void initView() {
@@ -61,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
         videoAD = findViewById(R.id.video_advertisement);
         imageAD = findViewById(R.id.image_advertisement);
         btnTimer = findViewById(R.id.timer_view);
+        initSplash();
     }
 
     private void initSplash() {
@@ -83,9 +82,7 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
-    protected String getMainRouteUri() {
-        return null;
-    }
+    protected abstract String getMainRouteUri();
 
     protected boolean getIsFirstLaunchApp() {
         return firstLaunchApp;
@@ -99,7 +96,6 @@ public class SplashActivity extends AppCompatActivity {
         if (!isJumpToNext) {
             isJumpToNext = true;
             Router.startUri(this, getMainRouteUri());
-            this.finish();
         }
     }
 
